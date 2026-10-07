@@ -62,6 +62,13 @@ const videos = [
     title: 'Levei um golpe: o que fazer agora?',
     subtitle: 'primetek',
     youtube: 'https://www.youtube.com/watch?v=YUgZadIt-sk'
+  },
+   {
+    id: 9,
+    type: 'short',
+    title: 'Rifa do Pedroca e Camomila',
+    subtitle: 'dev.pedroca',
+    youtube: 'https://www.youtube.com/shorts/D3oh7QUdeeE'
   }
 ];
 
