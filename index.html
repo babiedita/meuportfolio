@@ -1,35 +1,156 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Histórias com ritmo, personalidade e bons cortes. Portfólio de edição de vídeo de Bárbara Eichenberg.">
-  <meta name="author" content="Bárbara Eichenberg">
-  <meta property="og:title" content="Bárbara Eichenberg — Edição de vídeo">
-  <meta property="og:description" content="Conheça uma seleção de filmes, vídeos curtos e edições criativas.">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <title>Bárbara Eichenberg — Edição de vídeo</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="https://use.typekit.net/ndv3lae.css">
-  <link rel="stylesheet" href="style.css?v=1100">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Portfólio de edição de vídeo de Bárbara Eichenberg."
+  >
+
+  <meta
+    name="author"
+    content="Bárbara Eichenberg"
+  >
+
+  <meta
+    property="og:title"
+    content="Bárbara Eichenberg — Edição de vídeo"
+  >
+
+  <meta
+    property="og:description"
+    content="Conheça meu portfólio de edição de vídeo."
+  >
+
+  <meta
+    property="og:type"
+    content="website"
+  >
+
+  <meta
+    name="twitter:card"
+    content="summary_large_image"
+  >
+
+
+  <title>
+    Bárbara Eichenberg — Edição de vídeo
+  </title>
+
+
+  <!-- FAVICON -->
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+  >
+
+
+  <!-- COOLVETICA / ADOBE FONTS -->
+
+  <link
+    rel="stylesheet"
+    href="https://use.typekit.net/ndv3lae.css"
+  >
+
+
+  <!-- CSS -->
+
+  <link
+    rel="stylesheet"
+    href="style.css?v=1200"
+  >
+
 </head>
+
+
 <body>
-  <div class="music-player" id="musicPlayer">
-    <img class="music-cover" id="musicCover" src="covers/miimaker.png" alt="">
+
+
+  <!-- =====================================
+       PLAYER DE MÚSICA
+  ====================================== -->
+
+  <div
+    class="music-player"
+    id="musicPlayer"
+  >
+
+
+    <img
+      class="music-cover"
+      id="musicCover"
+      src="covers/miimaker.png"
+      alt=""
+    >
+
 
     <div class="music-info">
-      <span class="music-now">Você está ouvindo agora:</span>
-      <span class="music-title" id="musicTitle">Mii Maker Editing Mii</span>
+
+      <span class="music-now">
+        Você está ouvindo agora:
+      </span>
+
+      <span
+        class="music-title"
+        id="musicTitle"
+      >
+        Mii Maker Editing Mii
+      </span>
+
     </div>
+
 
     <div class="music-controls">
-      <button class="music-control" id="musicPrev" type="button" aria-label="Música anterior">◀◀</button>
-      <button class="music-control music-play" id="musicPlay" type="button" aria-label="Tocar ou pausar">▶</button>
-      <button class="music-control" id="musicNext" type="button" aria-label="Próxima música">▶▶</button>
+
+      <button
+        class="music-control"
+        id="musicPrev"
+        type="button"
+        aria-label="Música anterior"
+      >
+        ◀◀
+      </button>
+
+
+      <button
+        class="music-control music-play"
+        id="musicPlay"
+        type="button"
+        aria-label="Tocar ou pausar"
+      >
+        ▶
+      </button>
+
+
+      <button
+        class="music-control"
+        id="musicNext"
+        type="button"
+        aria-label="Próxima música"
+      >
+        ▶▶
+      </button>
+
     </div>
 
-    <div class="music-volume-wrap" aria-label="Controle de volume">
+
+    <!-- VOLUME -->
+
+    <div
+      class="music-volume-wrap"
+      aria-label="Controle de volume"
+    >
+
       <input
         class="music-volume"
         id="musicVolume"
@@ -40,75 +161,401 @@
         step="1"
         aria-label="Volume da música"
       >
+
     </div>
 
-    <button class="music-close" id="musicClose" type="button" aria-label="Minimizar player">×</button>
-    <audio id="backgroundAudio" preload="auto"></audio>
+
+    <!-- MINIMIZAR -->
+
+    <button
+      class="music-close"
+      id="musicClose"
+      type="button"
+      aria-label="Minimizar player"
+    >
+      ×
+    </button>
+
+
+    <audio
+      id="backgroundAudio"
+      preload="auto"
+    ></audio>
+
   </div>
 
-  <div class="music-player-mini is-hidden" id="musicPlayerMini" aria-label="Player de música minimizado">
-    <button class="music-mini-control" id="musicMiniPrev" type="button" aria-label="Música anterior">◀◀</button>
-    <button class="music-mini-control music-mini-play" id="musicMiniPlay" type="button" aria-label="Tocar ou pausar">▶</button>
-    <button class="music-mini-control" id="musicMiniNext" type="button" aria-label="Próxima música">▶▶</button>
+
+
+  <!-- =====================================
+       PLAYER MINIMIZADO
+  ====================================== -->
+
+  <div
+    class="music-player-mini is-hidden"
+    id="musicPlayerMini"
+    aria-label="Player de música minimizado"
+  >
+
+    <button
+      class="music-mini-control"
+      id="musicMiniPrev"
+      type="button"
+      aria-label="Música anterior"
+    >
+      ◀◀
+    </button>
+
+
+    <button
+      class="music-mini-control music-mini-play"
+      id="musicMiniPlay"
+      type="button"
+      aria-label="Tocar ou pausar"
+    >
+      ▶
+    </button>
+
+
+    <button
+      class="music-mini-control"
+      id="musicMiniNext"
+      type="button"
+      aria-label="Próxima música"
+    >
+      ▶▶
+    </button>
+
   </div>
+
+
+
+  <!-- =====================================
+       SITE
+  ====================================== -->
 
   <div class="portfolio-page">
+
+
+    <!-- CABEÇALHO -->
+
     <header class="site-header page-width">
+
       <nav aria-label="Navegação principal">
-        <a href="#projetos">Projetos</a>
-        <a href="#contato">Contato</a>
-        <a href="tutoriais.html">Tutoriais</a>
+
+        <a href="#projetos">
+          Projetos
+        </a>
+
+        <a href="#contato">
+          Contato
+        </a>
+
+        <a href="tutoriais.html">
+          Tutoriais
+        </a>
+
       </nav>
+
     </header>
 
+
+
     <main id="inicio">
-      <section class="intro page-width" aria-labelledby="intro-title">
-        <div class="intro-eyebrow"><span class="status-dot"></span> BÁRBARA EICHENBERG · VIDEO EDITOR</div>
-        <img class="intro-title-image" src="titulo.png" alt="Babi Edita" id="intro-title">
-        <p>Oi, bem vindo ao meu portfólio!<br class="desktop-break"> Eu sou a Babi, fique à vontade para conhecer meu trabalho :P</p>
 
-        <div class="reel-wrap">
-          <span class="reel-sticker">dá o play <span aria-hidden="true">↓</span></span>
-          <img class="reel-alien" src="alien.png" alt="" aria-hidden="true">
 
-          <div class="reel-frame" id="reelFrame">
-            <div class="reel-youtube" id="reelYoutube" aria-label="Reel demonstrativo"></div>
-            <div class="reel-topline"><span>REC <i></i></span></div>
-          </div>
+      <!-- =================================
+           INTRO
+      ================================== -->
 
-        <div class="reel-caption">
-  <span></span>
-  <span>REEL DEMONSTRATIVO / 2026</span>
-</div>
+      <section
+        class="intro page-width"
+        aria-labelledby="intro-title"
+      >
 
-      <section class="projects-section page-width" id="projetos" aria-labelledby="projects-title">
-<div class="section-eyebrow">
-  <span>01 / PORTFÓLIO</span>
-</div>
-        <div class="projects-heading">
-          <h2 id="projects-title">Projetos<span class="title-dot">.</span></h2>
-          <div class="filter-list" aria-label="Filtrar vídeos">
-            <button class="filter-button" aria-pressed="true" data-filter="short">Curtos</button>
-            <button class="filter-button" aria-pressed="false" data-filter="long">Longos</button>
-          </div>
+
+        <div class="intro-eyebrow">
+
+          <span class="status-dot"></span>
+
+          BÁRBARA EICHENBERG · VIDEO EDITOR
+
         </div>
 
-        <div class="project-grid" id="projectGrid"></div>
 
-        <div class="project-footnote"><span>Formatos diferentes. A mesma vontade de contar uma boa história.</span><span aria-hidden="true">＋</span></div>
+
+        <img
+          class="intro-title-image"
+          src="titulo.png"
+          alt="Babi Edita"
+          id="intro-title"
+        >
+
+
+
+        <p>
+          Oi, bem vindo ao meu portfolio!<br class="desktop-break">
+          Eu sou a Babi, fique a vontade para conhecer meu trabalho :P
+        </p>
+
+
+
+        <!-- ===============================
+             REEL
+        ================================ -->
+
+        <div class="reel-wrap">
+
+
+          <!-- STICKER -->
+
+          <span class="reel-sticker">
+
+            dá o play
+
+            <span aria-hidden="true">
+              ↓
+            </span>
+
+          </span>
+
+
+
+          <!-- QUADRADO DO REEL -->
+
+          <div
+            class="reel-frame"
+            id="reelFrame"
+          >
+
+
+            <!-- YOUTUBE -->
+
+            <div
+              class="reel-youtube"
+              id="reelYoutube"
+              aria-label="Reel demonstrativo"
+            ></div>
+
+
+
+            <!-- REC -->
+
+            <div class="reel-topline">
+
+              <span>
+
+                REC
+
+                <i></i>
+
+              </span>
+
+            </div>
+
+
+
+            <!-- ALIEN
+                 AGORA ELE FICA PRESO
+                 DIRETAMENTE AO REEL -->
+
+            <img
+              class="reel-alien"
+              src="alien.png"
+              alt=""
+              aria-hidden="true"
+            >
+
+
+          </div>
+
+
+
+          <!-- LEGENDA DO REEL -->
+
+          <div class="reel-caption">
+
+            <span></span>
+
+            <span>
+              REEL DEMONSTRATIVO / 2026
+            </span>
+
+          </div>
+
+
+        </div>
+
+
       </section>
-      <div id="contato" class="contact-anchor" aria-hidden="true"></div>
+
+
+
+      <!-- =================================
+           PROJETOS
+      ================================== -->
+
+      <section
+        class="projects-section page-width"
+        id="projetos"
+        aria-labelledby="projects-title"
+      >
+
+
+        <div class="section-eyebrow">
+
+          <span>
+            01 / PORTFÓLIO
+          </span>
+
+        </div>
+
+
+
+        <div class="projects-heading">
+
+
+          <h2 id="projects-title">
+
+            Projetos<span class="title-dot">.</span>
+
+          </h2>
+
+
+
+          <!-- FILTROS -->
+
+          <div
+            class="filter-list"
+            aria-label="Filtrar vídeos"
+          >
+
+
+            <button
+              class="filter-button"
+              aria-pressed="true"
+              data-filter="short"
+            >
+              Curtos
+            </button>
+
+
+            <button
+              class="filter-button"
+              aria-pressed="false"
+              data-filter="long"
+            >
+              Longos
+            </button>
+
+
+          </div>
+
+
+        </div>
+
+
+
+        <!-- OS VÍDEOS SÃO CRIADOS PELO SCRIPT.JS -->
+
+        <div
+          class="project-grid"
+          id="projectGrid"
+        ></div>
+
+
+
+        <div class="project-footnote">
+
+          <span>
+            Formatos diferentes. A mesma vontade de contar uma boa história.
+          </span>
+
+          <span aria-hidden="true">
+            ＋
+          </span>
+
+        </div>
+
+
+      </section>
+
+
+
+      <!-- =================================
+           CONTATO
+           VAMOS CONSTRUIR DEPOIS
+      ================================== -->
+
+      <div
+        id="contato"
+        class="contact-anchor"
+        aria-hidden="true"
+      ></div>
+
+
     </main>
+
+
   </div>
 
-  <div class="dialog-backdrop" id="videoDialog" aria-hidden="true">
-    <div class="dialog-panel video-dialog" role="dialog" aria-modal="true" aria-labelledby="videoDialogTitle">
-      <button class="dialog-close" data-close="videoDialog" aria-label="Fechar">×</button>
+
+
+  <!-- =====================================
+       MODAL DOS VÍDEOS
+  ====================================== -->
+
+  <div
+    class="dialog-backdrop"
+    id="videoDialog"
+    aria-hidden="true"
+  >
+
+
+    <div
+      class="dialog-panel video-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="videoDialogTitle"
+    >
+
+
+      <button
+        class="dialog-close"
+        data-close="videoDialog"
+        aria-label="Fechar"
+      >
+        ×
+      </button>
+
+
+
       <h3 id="videoDialogTitle"></h3>
-      <iframe id="youtubePlayer" title="Player do YouTube" src="" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+
+
+
+      <iframe
+        id="youtubePlayer"
+        title="Player do YouTube"
+        src=""
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowfullscreen
+      ></iframe>
+
+
     </div>
+
+
   </div>
 
-  <script src="script.js?v=1000"></script>
+
+
+  <!-- =====================================
+       JAVASCRIPT
+  ====================================== -->
+
+  <script src="script.js?v=1200"></script>
+
+
 </body>
+
 </html>
