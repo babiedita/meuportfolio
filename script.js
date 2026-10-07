@@ -99,7 +99,7 @@ const tutorialVideos = [
     type: 'short',
     title: 'Como animar BACKGROUND',
     subtitle: '',
-    youtube: 'https://www.youtube.com/shorts/r2ZJb_BSoME'
+    youtube: 'https://youtube.com/shorts/r2ZJb_BSoME'
   }
 ];
 
