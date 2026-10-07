@@ -1848,3 +1848,35 @@ button:active,
   }
 
 }
+/* =========================================
+   CORREÇÃO THUMBNAILS DOS TUTORIAIS
+========================================= */
+
+#tutorialGrid .project-cover {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+#tutorialGrid .project-cover img {
+  position: absolute;
+
+  top: -2px;
+  left: -2px;
+
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+
+  max-width: none;
+
+  object-fit: cover;
+
+  transform: scale(1.01);
+
+  transition:
+    transform .4s ease;
+}
+
+#tutorialGrid .project-cover:hover img {
+  transform: scale(1.045);
+}
