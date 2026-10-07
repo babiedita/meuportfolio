@@ -85,8 +85,6 @@ const playlist = [
 
 const filterButtons = [...document.querySelectorAll('.filter-button')];
 const projectGrid = document.getElementById('projectGrid');
-const shortCount = document.getElementById('shortCount');
-const longCount = document.getElementById('longCount');
 const reelFrame = document.getElementById('reelFrame');
 const reelYoutube = document.getElementById('reelYoutube');
 
@@ -214,15 +212,12 @@ function createProjectCard(video) {
   image.height = 864;
   applyYoutubeThumbnail(image, video.youtube);
 
-  const format = document.createElement('span');
-  format.className = 'project-format';
-  format.textContent = video.type === 'short' ? '▯ 9:16' : '▭ 16:9';
 
   const play = document.createElement('span');
   play.className = 'project-play';
   play.textContent = '▶';
 
-  button.append(image, format, play);
+  button.append(image, play);
 
   const details = document.createElement('div');
   details.className = 'project-details';
@@ -231,20 +226,12 @@ function createProjectCard(video) {
       <h3>${video.title}</h3>
       <p>${video.subtitle || ''}</p>
     </div>
-    <span class="project-arrow">↗</span>
   `;
 
   article.append(button, details);
   return article;
 }
 
-function updateCounts() {
-  const shortTotal = videos.filter((video) => video.type === 'short').length;
-  const longTotal = videos.filter((video) => video.type === 'long').length;
-
-  if (shortCount) shortCount.textContent = String(shortTotal).padStart(2, '0');
-  if (longCount) longCount.textContent = String(longTotal).padStart(2, '0');
-}
 
 function renderProjects() {
   if (!projectGrid) return;
@@ -656,5 +643,4 @@ function setupReelPlayer() {
 }
 
 setupReelPlayer();
-updateCounts();
 renderProjects();
