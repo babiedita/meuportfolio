@@ -9,24 +9,59 @@ const reelVideo = {
 const videos = [
   {
     id: 1,
-    type: 'long',
-    title: 'Um respiro lá fora',
-    subtitle: 'Lifestyle · Filme de viagem',
-    youtube: 'COLE_AQUI_O_LINK_DO_YOUTUBE_1'
+    type: 'short',
+    title: 'A MELHOR IA...',
+    subtitle: 'dev.pedroca',
+    youtube: 'https://youtu.be/_DPBiqax3RI?si=UziqVa82r_FY4odw'
   },
   {
     id: 2,
     type: 'short',
-    title: 'No seu ritmo',
-    subtitle: 'Esporte · Social media',
-    youtube: 'COLE_AQUI_O_LINK_DO_YOUTUBE_2'
+    title: 'Você é o que come...',
+    subtitle: 'lyukio',
+    youtube: 'https://youtu.be/M8ZeJpR1RlQ?si=3zVcxLhAZHB9MpVW'
   },
   {
     id: 3,
+    type: 'short',
+    title: 'Fingi estar afk e ganhei o round',
+    subtitle: 'levikingbr',
+    youtube: 'https://youtu.be/87HsdZ6cYPU?si=9ZbS6ZGdh76m8Pp8'
+  },
+  {
+    id: 4,
+    type: 'short',
+    title: 'Pov: você tem refluxo com sons de arroto',
+    subtitle: 'levikingbr',
+    youtube: 'https://youtu.be/Iu6F89vnrkU?si=ZelhorLrSoMU1h3t'
+  },
+  {
+    id: 5,
+    type: 'short',
+    title: 'Pov: você jogou seu primeiro jogo de terror',
+    subtitle: 'levikingbr',
+    youtube: 'https://youtube.com/shorts/PEXLdziGxFk'
+  },
+  {
+    id: 6,
     type: 'long',
-    title: 'Aumenta o som',
-    subtitle: 'Produto · Campanha',
-    youtube: 'COLE_AQUI_O_LINK_DO_YOUTUBE_3'
+    title: 'MATEI 20 e PERDI de JETT!',
+    subtitle: 'marcafatal',
+    youtube: 'https://youtu.be/b_JcHN8aElA?si=Tt7XYVlBXdY5GvJU'
+  },
+  {
+    id: 7,
+    type: 'long',
+    title: 'Não é RESIDENT EVIL... é melhor!',
+    subtitle: 'primetek',
+    youtube: 'https://www.youtube.com/watch?v=xZt5IvO3b84'
+  },
+  {
+    id: 8,
+    type: 'long',
+    title: 'Levei um golpe: o que fazer agora?',
+    subtitle: 'primetek',
+    youtube: 'https://www.youtube.com/watch?v=YUgZadIt-sk'
   }
 ];
 
@@ -68,13 +103,24 @@ const musicMiniPrev = document.getElementById('musicMiniPrev');
 const musicMiniPlay = document.getElementById('musicMiniPlay');
 const musicMiniNext = document.getElementById('musicMiniNext');
 
-let currentTrack = parseInt(localStorage.getItem('babiMusicTrackV2') || '0', 10);
-if (!Number.isFinite(currentTrack) || currentTrack < 0 || currentTrack >= playlist.length) currentTrack = 0;
+let currentTrack =
+  parseInt(localStorage.getItem('babiMusicTrackV2') || '0', 10);
 
-let musicDesiredPlaying = localStorage.getItem('babiMusicWantedV2') !== 'false';
+if (
+  !Number.isFinite(currentTrack) ||
+  currentTrack < 0 ||
+  currentTrack >= playlist.length
+) {
+  currentTrack = 0;
+}
+
+let musicDesiredPlaying =
+  localStorage.getItem('babiMusicWantedV2') !== 'false';
+
 let musicWasPlayingBeforeVideo = false;
 
 let currentFilter = 'all';
+
 
 function getYoutubeId(value) {
   if (!value) return null;
@@ -82,23 +128,42 @@ function getYoutubeId(value) {
   const clean = value.trim();
 
   if (!clean || clean.startsWith('COLE_AQUI')) return null;
-  if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) return clean;
+
+  if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) {
+    return clean;
+  }
 
   try {
     const url = new URL(clean);
 
-    if (url.hostname === 'youtu.be' || url.hostname === 'www.youtu.be') {
-      return url.pathname.split('/').filter(Boolean)[0] || null;
+    if (
+      url.hostname === 'youtu.be' ||
+      url.hostname === 'www.youtu.be'
+    ) {
+      return url.pathname
+        .split('/')
+        .filter(Boolean)[0] || null;
     }
 
     const watchId = url.searchParams.get('v');
-    if (watchId) return watchId;
 
-    const parts = url.pathname.split('/').filter(Boolean);
+    if (watchId) {
+      return watchId;
+    }
+
+    const parts = url.pathname
+      .split('/')
+      .filter(Boolean);
 
     for (const segment of ['shorts', 'embed', 'live']) {
       const index = parts.indexOf(segment);
-      if (index !== -1 && parts[index + 1]) return parts[index + 1];
+
+      if (
+        index !== -1 &&
+        parts[index + 1]
+      ) {
+        return parts[index + 1];
+      }
     }
   } catch (_) {
     return null;
@@ -107,42 +172,66 @@ function getYoutubeId(value) {
   return null;
 }
 
+
 function getYoutubeThumbnail(value) {
   const id = getYoutubeId(value);
+
   if (!id) return null;
+
   return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
 }
 
-function applyYoutubeThumbnail(image, youtube, fallback = '') {
+
+function applyYoutubeThumbnail(
+  image,
+  youtube,
+  fallback = ''
+) {
   if (!image) return;
 
   const id = getYoutubeId(youtube);
 
   if (!id) {
-    if (fallback) image.src = fallback;
+    if (fallback) {
+      image.src = fallback;
+    }
+
     return;
   }
 
   image.dataset.youtubeId = id;
   image.dataset.fallbackStage = 'maxres';
-  image.src = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+
+  image.src =
+    `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
 
   image.addEventListener('error', () => {
-    if (image.dataset.fallbackStage === 'maxres') {
+    if (
+      image.dataset.fallbackStage === 'maxres'
+    ) {
       image.dataset.fallbackStage = 'hq';
-      image.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
+      image.src =
+        `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
       return;
     }
 
-    if (fallback && image.dataset.fallbackStage === 'hq') {
+    if (
+      fallback &&
+      image.dataset.fallbackStage === 'hq'
+    ) {
       image.dataset.fallbackStage = 'local';
+
       image.src = fallback;
     }
   });
 }
 
+
 function getYoutubeEmbedUrl(value) {
   const id = getYoutubeId(value);
+
   if (!id) return null;
 
   const params = new URLSearchParams({
@@ -157,393 +246,986 @@ function getYoutubeEmbedUrl(value) {
   return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
 }
 
+
 function getVideoByKey(key) {
-  if (String(key) === 'reel') return reelVideo;
-  return videos.find((video) => String(video.id) === String(key)) || null;
+  if (String(key) === 'reel') {
+    return reelVideo;
+  }
+
+  return videos.find(
+    video =>
+      String(video.id) === String(key)
+  ) || null;
 }
 
+
 function createProjectCard(video, index) {
-  const article = document.createElement('article');
-  article.className = `project ${video.type === 'short' ? 'project-short' : 'project-long'}`;
-  article.dataset.format = video.type;
+  const article =
+    document.createElement('article');
 
-  const button = document.createElement('button');
-  button.className = 'project-cover js-video';
-  button.dataset.videoKey = video.id;
-  button.setAttribute('aria-label', `Reproduzir ${video.title}`);
+  article.className =
+    `project ${
+      video.type === 'short'
+        ? 'project-short'
+        : 'project-long'
+    }`;
 
-  const image = document.createElement('img');
-  image.alt = video.title;
-  image.loading = 'lazy';
-  image.width = 1536;
-  image.height = 864;
-  applyYoutubeThumbnail(image, video.youtube);
+  article.dataset.format =
+    video.type;
 
-  const format = document.createElement('span');
-  format.className = 'project-format';
-  format.textContent = video.type === 'short' ? '▯ 9:16' : '▭ 16:9';
+  const button =
+    document.createElement('button');
 
-  const play = document.createElement('span');
-  play.className = 'project-play';
-  play.textContent = '▶';
+  button.className =
+    'project-cover js-video';
 
-  button.append(image, format, play);
+  button.dataset.videoKey =
+    video.id;
 
-  const details = document.createElement('div');
-  details.className = 'project-details';
+  button.setAttribute(
+    'aria-label',
+    `Reproduzir ${video.title}`
+  );
+
+  const image =
+    document.createElement('img');
+
+  image.alt =
+    video.title;
+
+  image.loading =
+    'lazy';
+
+  image.width =
+    1536;
+
+  image.height =
+    864;
+
+  applyYoutubeThumbnail(
+    image,
+    video.youtube
+  );
+
+  const format =
+    document.createElement('span');
+
+  format.className =
+    'project-format';
+
+  format.textContent =
+    video.type === 'short'
+      ? '▯ 9:16'
+      : '▭ 16:9';
+
+  const play =
+    document.createElement('span');
+
+  play.className =
+    'project-play';
+
+  play.textContent =
+    '▶';
+
+  button.append(
+    image,
+    format,
+    play
+  );
+
+  const details =
+    document.createElement('div');
+
+  details.className =
+    'project-details';
+
   details.innerHTML = `
     <div>
       <h3>${video.title}</h3>
       <p>${video.subtitle || ''}</p>
     </div>
-    <span class="project-arrow">↗</span>
+
+    <span class="project-arrow">
+      ↗
+    </span>
   `;
 
-  const demo = document.createElement('span');
-  demo.className = 'project-demo';
-  demo.textContent = `PROJETO / ${String(index + 1).padStart(2, '0')}`;
+  const demo =
+    document.createElement('span');
 
-  article.append(button, details, demo);
+  demo.className =
+    'project-demo';
+
+  demo.textContent =
+    `PROJETO / ${
+      String(index + 1)
+        .padStart(2, '0')
+    }`;
+
+  article.append(
+    button,
+    details,
+    demo
+  );
+
   return article;
 }
 
-function updateCounts() {
-  const shortTotal = videos.filter((video) => video.type === 'short').length;
-  const longTotal = videos.filter((video) => video.type === 'long').length;
 
-  if (allCount) allCount.textContent = String(videos.length).padStart(2, '0');
-  if (shortCount) shortCount.textContent = String(shortTotal).padStart(2, '0');
-  if (longCount) longCount.textContent = String(longTotal).padStart(2, '0');
+function updateCounts() {
+  const shortTotal =
+    videos.filter(
+      video =>
+        video.type === 'short'
+    ).length;
+
+  const longTotal =
+    videos.filter(
+      video =>
+        video.type === 'long'
+    ).length;
+
+  if (allCount) {
+    allCount.textContent =
+      String(videos.length)
+        .padStart(2, '0');
+  }
+
+  if (shortCount) {
+    shortCount.textContent =
+      String(shortTotal)
+        .padStart(2, '0');
+  }
+
+  if (longCount) {
+    longCount.textContent =
+      String(longTotal)
+        .padStart(2, '0');
+  }
 }
+
 
 function renderProjects() {
   if (!projectGrid) return;
 
-  const visible = currentFilter === 'all'
-    ? videos
-    : videos.filter((video) => video.type === currentFilter);
+  const visible =
+    currentFilter === 'all'
+      ? videos
+      : videos.filter(
+          video =>
+            video.type === currentFilter
+        );
 
   projectGrid.innerHTML = '';
-  visible.forEach((video, index) => projectGrid.appendChild(createProjectCard(video, index)));
-  projectGrid.classList.toggle('short-grid', currentFilter === 'short');
+
+  visible.forEach(
+    (video, index) => {
+      projectGrid.appendChild(
+        createProjectCard(
+          video,
+          index
+        )
+      );
+    }
+  );
+
+  projectGrid.classList.toggle(
+    'short-grid',
+    currentFilter === 'short'
+  );
 }
 
-filterButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    currentFilter = button.dataset.filter || 'all';
 
-    filterButtons.forEach((item) => {
-      item.setAttribute('aria-pressed', String(item === button));
-    });
+filterButtons.forEach(
+  button => {
+    button.addEventListener(
+      'click',
+      () => {
+        currentFilter =
+          button.dataset.filter || 'all';
 
-    renderProjects();
-  });
-});
+        filterButtons.forEach(
+          item => {
+            item.setAttribute(
+              'aria-pressed',
+              String(item === button)
+            );
+          }
+        );
 
-/* =========================================
+        renderProjects();
+      }
+    );
+  }
+);
+
+
+/* =============================
    MÚSICA
-========================================= */
+============================= */
+
 
 function updateMusicButton() {
   if (!backgroundAudio) return;
-  const symbol = backgroundAudio.paused ? '▶' : '❚❚';
-  if (musicPlay) musicPlay.textContent = symbol;
-  if (musicMiniPlay) musicMiniPlay.textContent = symbol;
+
+  const symbol =
+    backgroundAudio.paused
+      ? '▶'
+      : '❚❚';
+
+  if (musicPlay) {
+    musicPlay.textContent =
+      symbol;
+  }
+
+  if (musicMiniPlay) {
+    musicMiniPlay.textContent =
+      symbol;
+  }
 }
+
 
 function saveMusicState() {
   if (!backgroundAudio) return;
-  localStorage.setItem('babiMusicTrackV2', String(currentTrack));
-  localStorage.setItem('babiMusicTimeV2', String(backgroundAudio.currentTime || 0));
-  localStorage.setItem('babiMusicWantedV2', musicDesiredPlaying ? 'true' : 'false');
+
+  localStorage.setItem(
+    'babiMusicTrackV2',
+    String(currentTrack)
+  );
+
+  localStorage.setItem(
+    'babiMusicTimeV2',
+    String(
+      backgroundAudio.currentTime || 0
+    )
+  );
+
+  localStorage.setItem(
+    'babiMusicWantedV2',
+    musicDesiredPlaying
+      ? 'true'
+      : 'false'
+  );
 }
 
-function loadMusic(index, restoreTime = false) {
+
+function loadMusic(
+  index,
+  restoreTime = false
+) {
   if (!backgroundAudio) return;
 
-  currentTrack = (index + playlist.length) % playlist.length;
-  const track = playlist[currentTrack];
+  currentTrack =
+    (
+      index +
+      playlist.length
+    ) %
+    playlist.length;
+
+  const track =
+    playlist[currentTrack];
 
   backgroundAudio.pause();
-  backgroundAudio.src = track.src;
-  backgroundAudio.preload = 'auto';
 
-  if (musicCover) musicCover.src = track.cover;
-  if (musicTitle) musicTitle.textContent = track.title;
+  backgroundAudio.src =
+    track.src;
 
-  localStorage.setItem('babiMusicTrackV2', String(currentTrack));
+  backgroundAudio.preload =
+    'auto';
+
+  if (musicCover) {
+    musicCover.src =
+      track.cover;
+  }
+
+  if (musicTitle) {
+    musicTitle.textContent =
+      track.title;
+  }
+
+  localStorage.setItem(
+    'babiMusicTrackV2',
+    String(currentTrack)
+  );
 
   if (restoreTime) {
-    const savedTime = parseFloat(localStorage.getItem('babiMusicTimeV2') || '0');
-    backgroundAudio.addEventListener('loadedmetadata', () => {
-      if (savedTime > 0 && savedTime < backgroundAudio.duration) {
-        backgroundAudio.currentTime = savedTime;
+    const savedTime =
+      parseFloat(
+        localStorage.getItem(
+          'babiMusicTimeV2'
+        ) || '0'
+      );
+
+    backgroundAudio.addEventListener(
+      'loadedmetadata',
+      () => {
+        if (
+          savedTime > 0 &&
+          savedTime <
+            backgroundAudio.duration
+        ) {
+          backgroundAudio.currentTime =
+            savedTime;
+        }
+      },
+      {
+        once: true
       }
-    }, { once: true });
+    );
   } else {
-    localStorage.setItem('babiMusicTimeV2', '0');
+    localStorage.setItem(
+      'babiMusicTimeV2',
+      '0'
+    );
   }
 
   backgroundAudio.load();
+
   updateMusicButton();
 }
+
 
 async function playMusic() {
   if (!backgroundAudio) return;
 
-  musicDesiredPlaying = true;
-  localStorage.setItem('babiMusicWantedV2', 'true');
+  musicDesiredPlaying =
+    true;
+
+  localStorage.setItem(
+    'babiMusicWantedV2',
+    'true'
+  );
 
   try {
     await backgroundAudio.play();
   } catch (_) {
-    // Alguns navegadores só liberam áudio após a primeira interação.
   }
 
   updateMusicButton();
 }
+
 
 function pauseMusic() {
   if (!backgroundAudio) return;
-  musicDesiredPlaying = false;
-  localStorage.setItem('babiMusicWantedV2', 'false');
+
+  musicDesiredPlaying =
+    false;
+
+  localStorage.setItem(
+    'babiMusicWantedV2',
+    'false'
+  );
+
   backgroundAudio.pause();
+
   updateMusicButton();
 }
 
+
 function toggleMusic() {
   if (!backgroundAudio) return;
-  if (backgroundAudio.paused) playMusic();
-  else pauseMusic();
-}
 
-function changeTrack(direction) {
-  const shouldPlay = musicDesiredPlaying;
-  loadMusic(currentTrack + direction, false);
-
-  if (shouldPlay) {
-    backgroundAudio?.addEventListener('canplay', () => playMusic(), { once: true });
+  if (backgroundAudio.paused) {
+    playMusic();
+  } else {
+    pauseMusic();
   }
 }
 
-function nextMusic() { changeTrack(1); }
-function previousMusic() { changeTrack(-1); }
+
+function changeTrack(direction) {
+  const shouldPlay =
+    musicDesiredPlaying;
+
+  loadMusic(
+    currentTrack + direction,
+    false
+  );
+
+  if (shouldPlay) {
+    backgroundAudio?.addEventListener(
+      'canplay',
+      () => playMusic(),
+      {
+        once: true
+      }
+    );
+  }
+}
+
+
+function nextMusic() {
+  changeTrack(1);
+}
+
+
+function previousMusic() {
+  changeTrack(-1);
+}
+
 
 function showMiniPlayer() {
-  if (!musicPlayer || !musicPlayerMini) return;
-
-  localStorage.setItem('babiMusicMinimizedV2', 'true');
-  musicPlayer.classList.add('is-fading-out');
-
-  setTimeout(() => {
-    musicPlayer.classList.add('is-hidden');
-    musicPlayer.classList.remove('is-fading-out');
-
-    musicPlayerMini.classList.remove('is-hidden', 'is-rising');
-    musicPlayerMini.classList.add('is-dropping');
-
-    setTimeout(() => musicPlayerMini.classList.remove('is-dropping'), 350);
-  }, 180);
-}
-
-function showMainPlayer() {
-  if (!musicPlayer || !musicPlayerMini) return;
-
-  localStorage.setItem('babiMusicMinimizedV2', 'false');
-  musicPlayerMini.classList.remove('is-dropping');
-  musicPlayerMini.classList.add('is-rising');
-
-  setTimeout(() => {
-    musicPlayerMini.classList.add('is-hidden');
-    musicPlayerMini.classList.remove('is-rising');
-
-    musicPlayer.classList.remove('is-hidden');
-    musicPlayer.classList.add('is-fading-in');
-
-    setTimeout(() => musicPlayer.classList.remove('is-fading-in'), 300);
-  }, 230);
-}
-
-musicPlay?.addEventListener('click', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  toggleMusic();
-});
-
-musicMiniPlay?.addEventListener('click', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  toggleMusic();
-});
-
-musicNext?.addEventListener('click', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  nextMusic();
-});
-
-musicMiniNext?.addEventListener('click', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  nextMusic();
-});
-
-musicPrev?.addEventListener('click', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  previousMusic();
-});
-
-musicMiniPrev?.addEventListener('click', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  previousMusic();
-});
-
-musicClose?.addEventListener('click', (event) => {
-  event.preventDefault();
-  event.stopPropagation();
-  showMiniPlayer();
-});
-
-musicPlayerMini?.addEventListener('click', (event) => {
-  if (event.target.closest('button')) return;
-  showMainPlayer();
-});
-
-backgroundAudio?.addEventListener('ended', () => {
-  const shouldPlay = musicDesiredPlaying;
-  loadMusic(currentTrack + 1, false);
-  if (shouldPlay) backgroundAudio?.addEventListener('canplay', () => playMusic(), { once: true });
-});
-
-backgroundAudio?.addEventListener('play', updateMusicButton);
-backgroundAudio?.addEventListener('pause', updateMusicButton);
-backgroundAudio?.addEventListener('timeupdate', saveMusicState);
-
-const videoDialog = document.getElementById('videoDialog');
-const videoDialogTitle = document.getElementById('videoDialogTitle');
-const youtubePlayer = document.getElementById('youtubePlayer');
-
-function openVideo(video) {
-  if (!videoDialog || !youtubePlayer || !video) return;
-
-  const embedUrl = getYoutubeEmbedUrl(video.youtube);
-
-  if (!embedUrl) {
-    console.warn(`Adicione um link válido do YouTube ao vídeo "${video.title}" em script.js.`);
+  if (
+    !musicPlayer ||
+    !musicPlayerMini
+  ) {
     return;
   }
 
-  musicWasPlayingBeforeVideo = Boolean(backgroundAudio && !backgroundAudio.paused);
-  if (musicWasPlayingBeforeVideo && backgroundAudio) {
+  localStorage.setItem(
+    'babiMusicMinimizedV2',
+    'true'
+  );
+
+  musicPlayer.classList.add(
+    'is-fading-out'
+  );
+
+  setTimeout(
+    () => {
+      musicPlayer.classList.add(
+        'is-hidden'
+      );
+
+      musicPlayer.classList.remove(
+        'is-fading-out'
+      );
+
+      musicPlayerMini.classList.remove(
+        'is-hidden',
+        'is-rising'
+      );
+
+      musicPlayerMini.classList.add(
+        'is-dropping'
+      );
+
+      setTimeout(
+        () => {
+          musicPlayerMini.classList.remove(
+            'is-dropping'
+          );
+        },
+        350
+      );
+    },
+    180
+  );
+}
+
+
+function showMainPlayer() {
+  if (
+    !musicPlayer ||
+    !musicPlayerMini
+  ) {
+    return;
+  }
+
+  localStorage.setItem(
+    'babiMusicMinimizedV2',
+    'false'
+  );
+
+  musicPlayerMini.classList.remove(
+    'is-dropping'
+  );
+
+  musicPlayerMini.classList.add(
+    'is-rising'
+  );
+
+  setTimeout(
+    () => {
+      musicPlayerMini.classList.add(
+        'is-hidden'
+      );
+
+      musicPlayerMini.classList.remove(
+        'is-rising'
+      );
+
+      musicPlayer.classList.remove(
+        'is-hidden'
+      );
+
+      musicPlayer.classList.add(
+        'is-fading-in'
+      );
+
+      setTimeout(
+        () => {
+          musicPlayer.classList.remove(
+            'is-fading-in'
+          );
+        },
+        300
+      );
+    },
+    230
+  );
+}
+
+
+musicPlay?.addEventListener(
+  'click',
+  event => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleMusic();
+  }
+);
+
+
+musicMiniPlay?.addEventListener(
+  'click',
+  event => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleMusic();
+  }
+);
+
+
+musicNext?.addEventListener(
+  'click',
+  event => {
+    event.preventDefault();
+    event.stopPropagation();
+    nextMusic();
+  }
+);
+
+
+musicMiniNext?.addEventListener(
+  'click',
+  event => {
+    event.preventDefault();
+    event.stopPropagation();
+    nextMusic();
+  }
+);
+
+
+musicPrev?.addEventListener(
+  'click',
+  event => {
+    event.preventDefault();
+    event.stopPropagation();
+    previousMusic();
+  }
+);
+
+
+musicMiniPrev?.addEventListener(
+  'click',
+  event => {
+    event.preventDefault();
+    event.stopPropagation();
+    previousMusic();
+  }
+);
+
+
+musicClose?.addEventListener(
+  'click',
+  event => {
+    event.preventDefault();
+    event.stopPropagation();
+    showMiniPlayer();
+  }
+);
+
+
+musicPlayerMini?.addEventListener(
+  'click',
+  event => {
+    if (
+      event.target.closest('button')
+    ) {
+      return;
+    }
+
+    showMainPlayer();
+  }
+);
+
+
+backgroundAudio?.addEventListener(
+  'ended',
+  () => {
+    const shouldPlay =
+      musicDesiredPlaying;
+
+    loadMusic(
+      currentTrack + 1,
+      false
+    );
+
+    if (shouldPlay) {
+      backgroundAudio?.addEventListener(
+        'canplay',
+        () => playMusic(),
+        {
+          once: true
+        }
+      );
+    }
+  }
+);
+
+
+backgroundAudio?.addEventListener(
+  'play',
+  updateMusicButton
+);
+
+
+backgroundAudio?.addEventListener(
+  'pause',
+  updateMusicButton
+);
+
+
+backgroundAudio?.addEventListener(
+  'timeupdate',
+  saveMusicState
+);
+
+
+/* =============================
+   VÍDEOS / MODAL
+============================= */
+
+
+const videoDialog =
+  document.getElementById(
+    'videoDialog'
+  );
+
+const videoDialogTitle =
+  document.getElementById(
+    'videoDialogTitle'
+  );
+
+const youtubePlayer =
+  document.getElementById(
+    'youtubePlayer'
+  );
+
+
+function openVideo(video) {
+  if (
+    !videoDialog ||
+    !youtubePlayer ||
+    !video
+  ) {
+    return;
+  }
+
+  const embedUrl =
+    getYoutubeEmbedUrl(
+      video.youtube
+    );
+
+  if (!embedUrl) {
+    console.warn(
+      `Adicione um link válido do YouTube ao vídeo "${video.title}" em script.js.`
+    );
+
+    return;
+  }
+
+  musicWasPlayingBeforeVideo =
+    Boolean(
+      backgroundAudio &&
+      !backgroundAudio.paused
+    );
+
+  if (
+    musicWasPlayingBeforeVideo &&
+    backgroundAudio
+  ) {
     backgroundAudio.pause();
     updateMusicButton();
   }
 
-  if (videoDialogTitle) videoDialogTitle.textContent = video.title;
+  if (videoDialogTitle) {
+    videoDialogTitle.textContent =
+      video.title;
+  }
 
-  youtubePlayer.src = embedUrl;
-  videoDialog.classList.add('open');
-  videoDialog.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
+  youtubePlayer.src =
+    embedUrl;
+
+  videoDialog.classList.add(
+    'open'
+  );
+
+  videoDialog.setAttribute(
+    'aria-hidden',
+    'false'
+  );
+
+  document.body.style.overflow =
+    'hidden';
 }
 
-document.addEventListener('click', (event) => {
-  const trigger = event.target.closest('.js-video');
-  if (!trigger) return;
 
-  const video = getVideoByKey(trigger.dataset.videoKey);
-  openVideo(video);
-});
+document.addEventListener(
+  'click',
+  event => {
+    const trigger =
+      event.target.closest(
+        '.js-video'
+      );
 
-const contactDialog = document.getElementById('contactDialog');
+    if (!trigger) return;
 
-document.querySelectorAll('.js-contact').forEach((button) => {
-  button.addEventListener('click', () => {
-    contactDialog?.classList.add('open');
-    contactDialog?.setAttribute('aria-hidden', 'false');
-  });
-});
+    const video =
+      getVideoByKey(
+        trigger.dataset.videoKey
+      );
+
+    openVideo(video);
+  }
+);
+
+
+const contactDialog =
+  document.getElementById(
+    'contactDialog'
+  );
+
+
+document
+  .querySelectorAll('.js-contact')
+  .forEach(
+    button => {
+      button.addEventListener(
+        'click',
+        () => {
+          contactDialog?.classList.add(
+            'open'
+          );
+
+          contactDialog?.setAttribute(
+            'aria-hidden',
+            'false'
+          );
+        }
+      );
+    }
+  );
+
 
 function closeDialog(dialog) {
   if (!dialog) return;
 
-  dialog.classList.remove('open');
-  dialog.setAttribute('aria-hidden', 'true');
+  dialog.classList.remove(
+    'open'
+  );
 
-  if (dialog === videoDialog && youtubePlayer) {
-    youtubePlayer.src = '';
-    document.body.style.overflow = '';
+  dialog.setAttribute(
+    'aria-hidden',
+    'true'
+  );
 
-    if (musicWasPlayingBeforeVideo && musicDesiredPlaying) {
+  if (
+    dialog === videoDialog &&
+    youtubePlayer
+  ) {
+    youtubePlayer.src =
+      '';
+
+    document.body.style.overflow =
+      '';
+
+    if (
+      musicWasPlayingBeforeVideo &&
+      musicDesiredPlaying
+    ) {
       playMusic();
     }
-    musicWasPlayingBeforeVideo = false;
+
+    musicWasPlayingBeforeVideo =
+      false;
   }
 }
 
-document.querySelectorAll('[data-close]').forEach((button) => {
-  button.addEventListener('click', () => {
-    const dialog = document.getElementById(button.dataset.close);
-    closeDialog(dialog);
-  });
-});
 
-[videoDialog, contactDialog].forEach((dialog) => {
-  dialog?.addEventListener('click', (event) => {
-    if (event.target === dialog) closeDialog(dialog);
-  });
-});
+document
+  .querySelectorAll('[data-close]')
+  .forEach(
+    button => {
+      button.addEventListener(
+        'click',
+        () => {
+          const dialog =
+            document.getElementById(
+              button.dataset.close
+            );
 
-document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape') return;
-  document.querySelectorAll('.dialog-backdrop.open').forEach(closeDialog);
-});
+          closeDialog(dialog);
+        }
+      );
+    }
+  );
 
-/* =========================================
-   INICIAR / RESTAURAR PLAYER
-========================================= */
 
-loadMusic(currentTrack, true);
+[videoDialog, contactDialog]
+  .forEach(
+    dialog => {
+      dialog?.addEventListener(
+        'click',
+        event => {
+          if (
+            event.target === dialog
+          ) {
+            closeDialog(dialog);
+          }
+        }
+      );
+    }
+  );
 
-const isMusicMinimized = localStorage.getItem('babiMusicMinimizedV2') === 'true';
+
+document.addEventListener(
+  'keydown',
+  event => {
+    if (
+      event.key !== 'Escape'
+    ) {
+      return;
+    }
+
+    document
+      .querySelectorAll(
+        '.dialog-backdrop.open'
+      )
+      .forEach(
+        closeDialog
+      );
+  }
+);
+
+
+/* =============================
+   INICIAR PLAYER
+============================= */
+
+
+loadMusic(
+  currentTrack,
+  true
+);
+
+
+const isMusicMinimized =
+  localStorage.getItem(
+    'babiMusicMinimizedV2'
+  ) === 'true';
+
+
 if (isMusicMinimized) {
-  musicPlayer?.classList.add('is-hidden');
-  musicPlayerMini?.classList.remove('is-hidden');
+  musicPlayer?.classList.add(
+    'is-hidden'
+  );
+
+  musicPlayerMini?.classList.remove(
+    'is-hidden'
+  );
 } else {
-  musicPlayer?.classList.remove('is-hidden');
-  musicPlayerMini?.classList.add('is-hidden');
+  musicPlayer?.classList.remove(
+    'is-hidden'
+  );
+
+  musicPlayerMini?.classList.add(
+    'is-hidden'
+  );
 }
 
+
 async function tryAutoplayMusic() {
-  if (!musicDesiredPlaying || !backgroundAudio) return;
+  if (
+    !musicDesiredPlaying ||
+    !backgroundAudio
+  ) {
+    return;
+  }
+
   try {
     await backgroundAudio.play();
   } catch (_) {
-    // O navegador pode exigir a primeira interação do visitante.
   }
+
   updateMusicButton();
 }
 
-backgroundAudio?.addEventListener('canplay', tryAutoplayMusic, { once: true });
+
+backgroundAudio?.addEventListener(
+  'canplay',
+  tryAutoplayMusic,
+  {
+    once: true
+  }
+);
+
+
 tryAutoplayMusic();
 
+
 async function unlockMusicOnFirstInteraction() {
-  if (!musicDesiredPlaying || !backgroundAudio || !backgroundAudio.paused) return;
+  if (
+    !musicDesiredPlaying ||
+    !backgroundAudio ||
+    !backgroundAudio.paused
+  ) {
+    return;
+  }
 
   try {
     await backgroundAudio.play();
+
     updateMusicButton();
-    document.removeEventListener('pointerdown', unlockMusicOnFirstInteraction);
-    document.removeEventListener('keydown', unlockMusicOnFirstInteraction);
-  } catch (_) {}
+
+    document.removeEventListener(
+      'pointerdown',
+      unlockMusicOnFirstInteraction
+    );
+
+    document.removeEventListener(
+      'keydown',
+      unlockMusicOnFirstInteraction
+    );
+  } catch (_) {
+  }
 }
 
-document.addEventListener('pointerdown', unlockMusicOnFirstInteraction);
-document.addEventListener('keydown', unlockMusicOnFirstInteraction);
-window.addEventListener('beforeunload', saveMusicState);
 
-applyYoutubeThumbnail(reelThumbnail, reelVideo.youtube);
+document.addEventListener(
+  'pointerdown',
+  unlockMusicOnFirstInteraction
+);
+
+
+document.addEventListener(
+  'keydown',
+  unlockMusicOnFirstInteraction
+);
+
+
+window.addEventListener(
+  'beforeunload',
+  saveMusicState
+);
+
+
+applyYoutubeThumbnail(
+  reelThumbnail,
+  reelVideo.youtube
+);
+
 updateCounts();
+
 renderProjects();
