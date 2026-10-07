@@ -271,7 +271,7 @@ h2 {
 }
 
 .filter-button[aria-pressed="true"] {
-  background: var(--foreground);
+  background: #6bbc0e;
   color: #fff;
 }
 
