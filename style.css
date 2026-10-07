@@ -44,7 +44,6 @@
 
 html {
   scroll-behavior: smooth;
-
   scroll-padding-top: 35px;
 }
 
@@ -53,17 +52,12 @@ html,
 body {
   margin: 0;
 
-  background:
-    var(--background);
+  background: var(--background);
+  color: var(--foreground);
 
-  color:
-    var(--foreground);
+  font-family: var(--display-font);
 
-  font-family:
-    var(--display-font);
-
-  -webkit-font-smoothing:
-    antialiased;
+  -webkit-font-smoothing: antialiased;
 }
 
 
@@ -83,28 +77,24 @@ h4,
 h5,
 h6,
 label {
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 }
 
 
 button,
 a {
-  -webkit-tap-highlight-color:
-    transparent;
+  -webkit-tap-highlight-color: transparent;
 }
 
 
 button {
   font: inherit;
-
   cursor: pointer;
 }
 
 
 a {
   color: inherit;
-
   text-decoration: none;
 }
 
@@ -127,7 +117,6 @@ h1,
 h2,
 h3 {
   font-weight: 400;
-
   letter-spacing: 0;
 }
 
@@ -149,13 +138,11 @@ h3 {
 .site-header nav {
   display: flex;
 
-  gap: 32px;
+  gap: 34px;
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
-  font-size: 14px;
-
+  font-size: 17px;
   font-weight: 300;
 
   letter-spacing: 0.1px;
@@ -163,9 +150,7 @@ h3 {
 
 
 .site-header nav a {
-  font-family:
-    var(--display-font);
-
+  font-family: var(--display-font);
   font-weight: 300;
 }
 
@@ -189,11 +174,9 @@ h3 {
 
   gap: 8px;
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 10px;
-
   font-weight: 300;
 
   letter-spacing: 1.8px;
@@ -208,8 +191,7 @@ h3 {
 
   border-radius: 50%;
 
-  background:
-    var(--green);
+  background: var(--green);
 }
 
 
@@ -225,23 +207,21 @@ h3 {
   height: auto;
 
   margin:
-    25px auto 17px;
+    25px auto 5px;
 
   object-fit: contain;
 }
 
 
 .intro > p {
-  margin-top: 20px;
+  margin:
+    0 auto;
 
-  color:
-    var(--muted-foreground);
+  color: var(--muted-foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 18px;
-
   font-weight: 300;
 
   line-height: 1.35;
@@ -265,11 +245,6 @@ h3 {
 .reel-frame {
   position: relative;
 
-  /*
-    IMPORTANTE:
-    visible para o alien poder sair
-    para fora do quadrado.
-  */
   overflow: visible;
 
   aspect-ratio:
@@ -277,8 +252,7 @@ h3 {
 
   border-radius: 7px;
 
-  background:
-    var(--foreground);
+  background: var(--foreground);
 }
 
 
@@ -293,8 +267,7 @@ h3 {
 
   border-radius: 7px;
 
-  background:
-    var(--film-gradient);
+  background: var(--film-gradient);
 
   pointer-events: none;
 }
@@ -314,8 +287,7 @@ h3 {
 
   border-radius: 7px;
 
-  background:
-    var(--foreground);
+  background: var(--foreground);
 }
 
 
@@ -341,14 +313,11 @@ h3 {
   top: 23px;
   right: 26px;
 
-  color:
-    var(--film-ink);
+  color: var(--film-ink);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 8px;
-
   font-weight: 300;
 
   letter-spacing: 1.5px;
@@ -372,8 +341,7 @@ h3 {
 
   border-radius: 50%;
 
-  background:
-    var(--lime);
+  background: var(--lime);
 }
 
 
@@ -400,14 +368,11 @@ h3 {
 
   border-radius: 3px;
 
-  background:
-    var(--lime);
+  background: var(--lime);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 19px;
-
   font-weight: 400;
 
   transform:
@@ -456,14 +421,11 @@ h3 {
 
   margin-top: 13px;
 
-  color:
-    var(--muted-foreground);
+  color: var(--muted-foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 10px;
-
   font-weight: 300;
 }
 
@@ -472,7 +434,6 @@ h3 {
   margin-left: auto;
 
   font-size: 8px;
-
   font-weight: 300;
 
   letter-spacing: 1px;
@@ -493,14 +454,11 @@ h3 {
 
   justify-content: space-between;
 
-  color:
-    var(--muted-foreground);
+  color: var(--muted-foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 9px;
-
   font-weight: 300;
 
   letter-spacing: 1.5px;
@@ -531,11 +489,9 @@ h3 {
 
 
 h2 {
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 43px;
-
   font-weight: 400;
 
   line-height: 1.13;
@@ -543,8 +499,7 @@ h2 {
 
 
 .title-dot {
-  color:
-    var(--primary);
+  color: var(--primary);
 }
 
 
@@ -569,17 +524,13 @@ h2 {
 
   border-radius: 999px;
 
-  background:
-    transparent;
+  background: transparent;
 
-  color:
-    var(--muted-foreground);
+  color: var(--muted-foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 11px;
-
   font-weight: 300;
 
   transition:
@@ -598,11 +549,9 @@ h2 {
 .filter-button[
   aria-pressed="true"
 ] {
-  background:
-    #6bbc0e;
+  background: #6bbc0e;
 
-  color:
-    #ffffff;
+  color: #ffffff;
 }
 
 
@@ -619,7 +568,7 @@ h2 {
 }
 
 
-/* curtos */
+/* CURTOS */
 
 .project-grid.short-grid {
   grid-template-columns:
@@ -630,7 +579,7 @@ h2 {
 }
 
 
-/* longos */
+/* LONGOS */
 
 .project-grid.long-grid {
   grid-template-columns:
@@ -641,7 +590,7 @@ h2 {
 }
 
 
-/* tutoriais */
+/* TUTORIAIS */
 
 #tutorialGrid {
   grid-template-columns:
@@ -676,18 +625,13 @@ h2 {
 
   border-radius: 5px;
 
-  background:
-    #dddddd;
+  background: #dddddd;
 
-  /*
-    Ajuda a impedir aquelas
-    linhas/cantos pretos.
-  */
   isolation: isolate;
 }
 
 
-/* shorts */
+/* SHORTS */
 
 .project-short
 .project-cover {
@@ -696,7 +640,7 @@ h2 {
 }
 
 
-/* longos */
+/* LONGOS */
 
 .project-long
 .project-cover {
@@ -717,12 +661,6 @@ h2 {
 
   object-fit: cover;
 
-  /*
-    Micro zoom permanente.
-    Esconde as linhas pretas
-    que algumas thumbs do YouTube
-    deixam nas laterais.
-  */
   transform:
     scale(1.012);
 
@@ -732,11 +670,9 @@ h2 {
   transition:
     transform 0.4s ease;
 
-  backface-visibility:
-    hidden;
+  backface-visibility: hidden;
 
-  -webkit-backface-visibility:
-    hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 
@@ -775,11 +711,9 @@ h2 {
   background:
     rgba(18, 18, 18, 0.30);
 
-  color:
-    #ffffff;
+  color: #ffffff;
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   transform:
     translate(
@@ -790,7 +724,7 @@ h2 {
 
 
 /* =========================================
-   TEXTOS DOS VÍDEOS
+   TEXTO DOS VÍDEOS
 ========================================= */
 
 .project-details {
@@ -801,14 +735,11 @@ h2 {
 .project-details h3 {
   margin: 0;
 
-  color:
-    var(--foreground);
+  color: var(--foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 22px;
-
   font-weight: 400;
 
   line-height: 1.05;
@@ -819,14 +750,11 @@ h2 {
   margin:
     4px 0 0;
 
-  color:
-    var(--muted-foreground);
+  color: var(--muted-foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 11px;
-
   font-weight: 300;
 }
 
@@ -849,14 +777,11 @@ h2 {
     1px solid
     var(--border);
 
-  color:
-    var(--muted-foreground);
+  color: var(--muted-foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 11px;
-
   font-weight: 300;
 }
 
@@ -867,6 +792,54 @@ h2 {
 
 .tutorials-projects {
   padding-bottom: 70px;
+}
+
+
+/* =========================================
+   CORREÇÃO THUMBS TUTORIAIS
+========================================= */
+
+#tutorialGrid .project-cover {
+  position: relative;
+
+  overflow: hidden;
+
+  background: transparent;
+}
+
+
+#tutorialGrid .project-cover img {
+  position: absolute;
+
+  top: -2px;
+  left: -2px;
+
+  width:
+    calc(
+      100% + 4px
+    );
+
+  height:
+    calc(
+      100% + 4px
+    );
+
+  max-width: none;
+
+  object-fit: cover;
+
+  transform:
+    scale(1.01);
+
+  transition:
+    transform 0.4s ease;
+}
+
+
+#tutorialGrid
+.project-cover:hover img {
+  transform:
+    scale(1.045);
 }
 
 
@@ -922,8 +895,7 @@ h2 {
 
   border-radius: 12px;
 
-  background:
-    #ffffff;
+  background: #ffffff;
 
   box-shadow:
     0 24px 80px
@@ -935,11 +907,9 @@ h2 {
   margin:
     0 0 14px;
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 26px;
-
   font-weight: 400;
 }
 
@@ -952,11 +922,9 @@ h2 {
 
   border: 0;
 
-  background:
-    transparent;
+  background: transparent;
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 25px;
 }
@@ -974,8 +942,7 @@ h2 {
 
   border-radius: 4px;
 
-  background:
-    #222222;
+  background: #222222;
 }
 
 
@@ -1074,8 +1041,7 @@ button:active,
     0 10px 28px
     rgba(0, 0, 0, 0.08);
 
-  color:
-    var(--foreground);
+  color: var(--foreground);
 
   transition:
     opacity 0.24s ease,
@@ -1098,8 +1064,7 @@ button:active,
 
   border-radius: 10px;
 
-  background:
-    var(--muted);
+  background: var(--muted);
 }
 
 
@@ -1111,14 +1076,11 @@ button:active,
 .music-now {
   display: block;
 
-  color:
-    var(--muted-foreground);
+  color: var(--muted-foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 10px;
-
   font-weight: 300;
 
   line-height: 1;
@@ -1132,14 +1094,11 @@ button:active,
 
   overflow: hidden;
 
-  color:
-    var(--foreground);
+  color: var(--foreground);
 
-  font-family:
-    var(--display-font);
+  font-family: var(--display-font);
 
   font-size: 18px;
-
   font-weight: 300;
 
   line-height: 1.05;
@@ -1151,7 +1110,7 @@ button:active,
 
 
 /* =========================================
-   CONTROLES DA MÚSICA
+   CONTROLES PLAYER
 ========================================= */
 
 .music-controls {
@@ -1177,18 +1136,15 @@ button:active,
 
   border: 0;
 
-  background:
-    transparent;
+  background: transparent;
 
-  color:
-    var(--foreground);
+  color: var(--foreground);
 
   font-family:
     Arial,
     sans-serif;
 
   font-size: 14px;
-
   font-weight: 700;
 
   line-height: 1;
@@ -1204,8 +1160,7 @@ button:active,
   transform:
     scale(1.08);
 
-  opacity:
-    0.72;
+  opacity: 0.72;
 }
 
 
@@ -1242,11 +1197,9 @@ button:active,
 
   border-radius: 50%;
 
-  background:
-    #f5f5f5;
+  background: #f5f5f5;
 
-  color:
-    var(--muted-foreground);
+  color: var(--muted-foreground);
 
   font-family:
     Arial,
@@ -1281,15 +1234,12 @@ button:active,
   --volume-fill: 50%;
 
   appearance: none;
-
-  -webkit-appearance:
-    none;
+  -webkit-appearance: none;
 
   width: 62px;
   height: 6px;
 
   margin: 0;
-
   padding: 0;
 
   border: 0;
@@ -1326,15 +1276,13 @@ button:active,
 
   border-radius: 999px;
 
-  background:
-    transparent;
+  background: transparent;
 }
 
 
 .music-volume
 ::-webkit-slider-thumb {
-  -webkit-appearance:
-    none;
+  -webkit-appearance: none;
 
   appearance: none;
 
@@ -1345,8 +1293,7 @@ button:active,
 
   border: 0;
 
-  background:
-    transparent;
+  background: transparent;
 }
 
 
@@ -1358,8 +1305,7 @@ button:active,
 
   border-radius: 999px;
 
-  background:
-    #b9b9b9;
+  background: #b9b9b9;
 }
 
 
@@ -1369,8 +1315,7 @@ button:active,
 
   border-radius: 999px;
 
-  background:
-    var(--foreground);
+  background: var(--foreground);
 }
 
 
@@ -1381,8 +1326,7 @@ button:active,
 
   border: 0;
 
-  background:
-    transparent;
+  background: transparent;
 }
 
 
@@ -1421,8 +1365,7 @@ button:active,
     0 9px 24px
     rgba(0, 0, 0, 0.07);
 
-  color:
-    var(--foreground);
+  color: var(--foreground);
 }
 
 
@@ -1437,7 +1380,7 @@ button:active,
 
 
 /* =========================================
-   ANIMAÇÕES DO PLAYER
+   ANIMAÇÕES PLAYER
 ========================================= */
 
 .music-player.is-fading-out {
@@ -1577,6 +1520,8 @@ button:active,
         520px,
         86vw
       );
+
+    margin-bottom: 4px;
   }
 
 
@@ -1637,11 +1582,9 @@ button:active,
   /* PROJETOS */
 
   .projects-heading {
-    flex-direction:
-      column;
+    flex-direction: column;
 
-    align-items:
-      flex-start;
+    align-items: flex-start;
   }
 
 
@@ -1832,8 +1775,7 @@ button:active,
 (prefers-reduced-motion: reduce) {
 
   html {
-    scroll-behavior:
-      auto;
+    scroll-behavior: auto;
   }
 
 
@@ -1847,36 +1789,4 @@ button:active,
       0.01ms !important;
   }
 
-}
-/* =========================================
-   CORREÇÃO THUMBNAILS DOS TUTORIAIS
-========================================= */
-
-#tutorialGrid .project-cover {
-  position: relative;
-  overflow: hidden;
-  background: transparent;
-}
-
-#tutorialGrid .project-cover img {
-  position: absolute;
-
-  top: -2px;
-  left: -2px;
-
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-
-  max-width: none;
-
-  object-fit: cover;
-
-  transform: scale(1.01);
-
-  transition:
-    transform .4s ease;
-}
-
-#tutorialGrid .project-cover:hover img {
-  transform: scale(1.045);
 }
