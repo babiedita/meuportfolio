@@ -102,8 +102,19 @@ h3 {
 
 .intro > p {
   color: var(--muted-foreground);
-  font-size: 14px;
-  line-height: 1.8;
+
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+
+  font-size: 18px;
+  font-weight: 300;
+
+  line-height: 1.35;
+
+  margin-top: 20px;
 }
 
 /* REEL */
