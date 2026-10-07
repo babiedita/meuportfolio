@@ -751,3 +751,34 @@ label {
   font-size: 18px;
   font-weight: 300;
 }
+/* =========================================
+   ALIEN DO REEL
+========================================= */
+
+.reel-wrap {
+  position: relative;
+}
+
+.reel-alien {
+  position: absolute;
+
+  left: -35px;
+  bottom: 60px;
+
+  width: 105px;
+  height: auto;
+
+  z-index: 5;
+
+  transform: rotate(-13deg);
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(
+      0 8px 16px
+      rgba(0,0,0,.10)
+    );
+}
