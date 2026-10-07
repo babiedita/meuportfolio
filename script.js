@@ -92,6 +92,15 @@ const videos = [
     youtube: 'https://www.youtube.com/watch?v=xZt5IvO3b84'
   },
 
+    {
+    id: 10,
+    order: 2,
+    type: 'long',
+    title: 'O país mais frio do mundo!',
+    subtitle: 'silas',
+    youtube: 'https://youtu.be/t43E4X54fbY'
+  },
+
   {
     id: 8,
     order: 3,
