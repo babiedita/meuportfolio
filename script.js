@@ -6,6 +6,19 @@ const reelVideo = {
   youtube: 'COLE_AQUI_O_LINK_DO_YOUTUBE_DO_REEL'
 };
 
+
+/* =========================================
+   VÍDEOS DO PORTFÓLIO
+
+   Para mudar a ordem:
+   order: 1 = primeiro
+   order: 2 = segundo
+   order: 3 = terceiro
+   etc.
+
+   Curtos e Longos têm ordens independentes.
+========================================= */
+
 const videos = [
   {
     id: 1,
@@ -53,6 +66,15 @@ const videos = [
   },
 
   {
+    id: 9,
+    order: 2,
+    type: 'short',
+    title: 'Rifa do Pedroca e Camomilla',
+    subtitle: 'dev.pedroca',
+    youtube: 'https://www.youtube.com/shorts/D3oh7QUdeeE'
+  },
+
+  {
     id: 6,
     order: 1,
     type: 'long',
@@ -71,15 +93,6 @@ const videos = [
   },
 
   {
-    id: 9,
-    order: 2,
-    type: 'short',
-    title: 'Rifa do Pedroca e Camomila',
-    subtitle: 'dev.pedroca',
-    youtube: 'https://www.youtube.com/shorts/D3oh7QUdeeE'
-  },
-  
-  {
     id: 8,
     order: 3,
     type: 'long',
@@ -88,6 +101,11 @@ const videos = [
     youtube: 'https://www.youtube.com/watch?v=YUgZadIt-sk'
   }
 ];
+
+
+/* =========================================
+   TUTORIAIS
+========================================= */
 
 const tutorialVideos = [
   {
@@ -223,7 +241,7 @@ const musicVolume =
 
 
 /* =========================================
-   ESTADO DA MÚSICA
+   ESTADO
 ========================================= */
 
 let currentTrack =
@@ -286,6 +304,7 @@ function getYoutubeId(value) {
   const clean =
     value.trim();
 
+
   if (
     !clean ||
     clean.startsWith('COLE_AQUI')
@@ -313,8 +332,8 @@ function getYoutubeId(value) {
       return (
         url.pathname
           .split('/')
-          .filter(Boolean)[0] ||
-        null
+          .filter(Boolean)[0]
+        || null
       );
     }
 
@@ -360,22 +379,6 @@ function getYoutubeId(value) {
 }
 
 
-function getYoutubeThumbnail(value) {
-  const id =
-    getYoutubeId(value);
-
-
-  if (!id) {
-    return null;
-  }
-
-
-  return (
-    `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
-  );
-}
-
-
 function applyYoutubeThumbnail(
   image,
   youtube,
@@ -398,9 +401,6 @@ function applyYoutubeThumbnail(
   }
 
 
-  image.dataset.youtubeId =
-    id;
-
   image.dataset.fallbackStage =
     'maxres';
 
@@ -418,6 +418,7 @@ function applyYoutubeThumbnail(
       ) {
         image.dataset.fallbackStage =
           'hq';
+
 
         image.src =
           `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
@@ -493,7 +494,7 @@ function getVideoByKey(key) {
 ========================================= */
 
 function getPlaceholderThumbnail(
-  title = 'Tutorial'
+  title = 'Vídeo'
 ) {
   const safeTitle =
     String(title).replace(
@@ -523,27 +524,14 @@ function getPlaceholderThumbnail(
 
       <text
         x="50%"
-        y="48%"
+        y="50%"
         dominant-baseline="middle"
         text-anchor="middle"
         fill="#2b2b2b"
         font-family="Arial, sans-serif"
-        font-size="46"
+        font-size="42"
       >
         ${safeTitle}
-      </text>
-
-      <text
-        x="50%"
-        y="57%"
-        dominant-baseline="middle"
-        text-anchor="middle"
-        fill="#777777"
-        font-family="Arial, sans-serif"
-        font-size="20"
-        letter-spacing="4"
-      >
-        EM BREVE
       </text>
     </svg>
   `;
@@ -556,7 +544,7 @@ function getPlaceholderThumbnail(
 
 
 /* =========================================
-   CRIAÇÃO DOS CARDS
+   CARDS
 ========================================= */
 
 function createProjectCard(video) {
@@ -570,10 +558,6 @@ function createProjectCard(video) {
         ? 'project-short'
         : 'project-long'
     }`;
-
-
-  article.dataset.format =
-    video.type;
 
 
   const button =
@@ -604,12 +588,6 @@ function createProjectCard(video) {
   image.loading =
     'lazy';
 
-  image.width =
-    1536;
-
-  image.height =
-    864;
-
 
   applyYoutubeThumbnail(
     image,
@@ -624,6 +602,7 @@ function createProjectCard(video) {
 
   play.className =
     'project-play';
+
 
   play.textContent =
     '▶';
@@ -699,6 +678,12 @@ function renderProjects() {
   projectGrid.classList.toggle(
     'short-grid',
     currentFilter === 'short'
+  );
+
+
+  projectGrid.classList.toggle(
+    'long-grid',
+    currentFilter === 'long'
   );
 }
 
@@ -1216,7 +1201,7 @@ function showMainPlayer() {
 
 
 /* =========================================
-   EVENTOS DO PLAYER
+   EVENTOS PLAYER
 ========================================= */
 
 musicPlay?.addEventListener(
@@ -1357,7 +1342,7 @@ backgroundAudio?.addEventListener(
 
 
 /* =========================================
-   MODAL DOS VÍDEOS
+   MODAL VÍDEO
 ========================================= */
 
 const videoDialog =
@@ -1395,10 +1380,6 @@ function openVideo(video) {
 
 
   if (!embedUrl) {
-    console.warn(
-      `Adicione um link válido do YouTube ao vídeo "${video.title}" em script.js.`
-    );
-
     return;
   }
 
@@ -1455,9 +1436,7 @@ document.addEventListener(
       );
 
 
-    if (!trigger) {
-      return;
-    }
+    if (!trigger) return;
 
 
     const video =
@@ -1472,45 +1451,11 @@ document.addEventListener(
 
 
 /* =========================================
-   CONTATO
-========================================= */
-
-const contactDialog =
-  document.getElementById(
-    'contactDialog'
-  );
-
-
-document
-  .querySelectorAll('.js-contact')
-  .forEach(
-    button => {
-      button.addEventListener(
-        'click',
-        () => {
-          contactDialog?.classList.add(
-            'open'
-          );
-
-
-          contactDialog?.setAttribute(
-            'aria-hidden',
-            'false'
-          );
-        }
-      );
-    }
-  );
-
-
-/* =========================================
-   FECHAR MODAIS
+   FECHAR MODAL
 ========================================= */
 
 function closeDialog(dialog) {
-  if (!dialog) {
-    return;
-  }
+  if (!dialog) return;
 
 
   dialog.classList.remove(
@@ -1570,47 +1515,37 @@ document
   );
 
 
-[videoDialog, contactDialog]
-  .forEach(
-    dialog => {
-      dialog?.addEventListener(
-        'click',
-        event => {
-          if (
-            event.target ===
-            dialog
-          ) {
-            closeDialog(dialog);
-          }
-        }
+videoDialog?.addEventListener(
+  'click',
+  event => {
+    if (
+      event.target ===
+      videoDialog
+    ) {
+      closeDialog(
+        videoDialog
       );
     }
-  );
+  }
+);
 
 
 document.addEventListener(
   'keydown',
   event => {
     if (
-      event.key !== 'Escape'
+      event.key === 'Escape'
     ) {
-      return;
-    }
-
-
-    document
-      .querySelectorAll(
-        '.dialog-backdrop.open'
-      )
-      .forEach(
-        closeDialog
+      closeDialog(
+        videoDialog
       );
+    }
   }
 );
 
 
 /* =========================================
-   INICIAR / RESTAURAR MÚSICA
+   INICIAR MÚSICA
 ========================================= */
 
 loadMusic(
@@ -1755,10 +1690,8 @@ window.addEventListener(
 let reelPlayer =
   null;
 
-
 let reelPlayerReady =
   false;
-
 
 let reelVisible =
   true;
@@ -1775,12 +1708,6 @@ function setupReelPlayer() {
     !reelId ||
     !reelYoutube
   ) {
-    if (reelYoutube) {
-      reelYoutube.classList.add(
-        'is-empty'
-      );
-    }
-
     return;
   }
 
@@ -1839,22 +1766,8 @@ function setupReelPlayer() {
   }
 
   else {
-    const previousReady =
-      window.onYouTubeIframeAPIReady;
-
-
     window.onYouTubeIframeAPIReady =
-      () => {
-        if (
-          typeof previousReady ===
-          'function'
-        ) {
-          previousReady();
-        }
-
-
-        startPlayer();
-      };
+      startPlayer;
 
 
     if (
@@ -1931,8 +1844,6 @@ function setupReelPlayer() {
 
 setupReelPlayer();
 
-
 renderProjects();
-
 
 renderTutorials();
