@@ -782,3 +782,34 @@ label {
       rgba(0,0,0,.10)
     );
 }
+.reel-frame {
+  position: relative;
+  overflow: visible;
+}
+
+.reel-youtube {
+  overflow: hidden;
+  border-radius: 7px;
+}
+
+.reel-alien {
+  position: absolute;
+
+  left: -45px;
+  bottom: -42px;
+
+  width: 105px;
+  height: auto;
+
+  z-index: 10;
+
+  transform: rotate(-13deg);
+
+  pointer-events: none;
+
+  filter:
+    drop-shadow(
+      0 8px 16px
+      rgba(0,0,0,.10)
+    );
+}
