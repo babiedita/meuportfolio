@@ -664,3 +664,90 @@ button,
     transform: translateX(-50%);
   }
 }
+/* =========================================
+   COOLVETICA EM TODO O SITE
+========================================= */
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+a,
+p,
+span,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label {
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+}
+
+
+/* textos pequenos / leves */
+
+.section-eyebrow,
+.project-details p,
+.reel-caption,
+.scroll-link,
+.intro-eyebrow,
+.music-now,
+.site-header nav,
+.filter-button {
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+
+  font-weight: 300;
+}
+
+
+/* títulos dos vídeos */
+
+.project-details h3 {
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+
+  font-weight: 400;
+}
+
+
+/* filtros */
+
+.filter-button {
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+
+  font-weight: 300;
+}
+
+
+/* texto principal da intro */
+
+.intro > p {
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+
+  font-size: 18px;
+  font-weight: 300;
+}
