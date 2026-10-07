@@ -6,17 +6,6 @@ const reelVideo = {
   youtube: 'COLE_AQUI_O_LINK_DO_YOUTUBE_DO_REEL'
 };
 
-
-/* =========================================
-   VÍDEOS DO PORTFÓLIO
-
-   Para mudar a ordem:
-   order: 1 = primeiro
-   order: 2 = segundo
-   order: 3 = terceiro
-   etc.
-========================================= */
-
 const videos = [
   {
     id: 1,
@@ -29,7 +18,7 @@ const videos = [
 
   {
     id: 2,
-    order: 2,
+    order: 3,
     type: 'short',
     title: 'Você é o que come...',
     subtitle: 'lyukio',
@@ -38,7 +27,7 @@ const videos = [
 
   {
     id: 3,
-    order: 3,
+    order: 6,
     type: 'short',
     title: 'Fingi estar afk e ganhei o round',
     subtitle: 'levikingbr',
@@ -82,6 +71,15 @@ const videos = [
   },
 
   {
+    id: 9,
+    order: 2,
+    type: 'short',
+    title: 'Rifa do Pedroca e Camomila',
+    subtitle: 'dev.pedroca',
+    youtube: 'https://www.youtube.com/shorts/D3oh7QUdeeE'
+  },
+  
+  {
     id: 8,
     order: 3,
     type: 'long',
@@ -90,14 +88,6 @@ const videos = [
     youtube: 'https://www.youtube.com/watch?v=YUgZadIt-sk'
   }
 ];
-
-
-/* =========================================
-   TUTORIAIS
-
-   A ordem daqui é independente
-   da ordem dos vídeos do portfólio.
-========================================= */
 
 const tutorialVideos = [
   {
