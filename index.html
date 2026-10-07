@@ -12,7 +12,7 @@
   <title>Bárbara Eichenberg — Edição de vídeo</title>
   <!-- favicon removido de propósito; adicionaremos o novo depois -->
   <link rel="stylesheet" href="https://use.typekit.net/ndv3lae.css">
-  <link rel="stylesheet" href="style.css?v=700">
+  <link rel="stylesheet" href="style.css?v=1000">
 </head>
 <body>
   <!-- PLAYER DE MÚSICA -->
@@ -30,8 +30,21 @@
       <button class="music-control" id="musicNext" type="button" aria-label="Próxima música">▶▶</button>
     </div>
 
+    <div class="music-volume-wrap" aria-label="Controle de volume">
+      <input
+        class="music-volume"
+        id="musicVolume"
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        step="1"
+        aria-label="Volume da música"
+      >
+    </div>
+
     <button class="music-close" id="musicClose" type="button" aria-label="Minimizar player">×</button>
-    <audio id="backgroundAudio" preload="auto" autoplay></audio>
+    <audio id="backgroundAudio" preload="auto"></audio>
   </div>
 
   <div class="music-player-mini is-hidden" id="musicPlayerMini" aria-label="Player de música minimizado">
@@ -93,6 +106,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=700"></script>
+  <script src="script.js?v=1000"></script>
 </body>
 </html>

@@ -65,6 +65,7 @@ const videos = [
   }
 ];
 
+
 const tutorialVideos = [
   {
     id: 'tutorial-1',
@@ -99,7 +100,7 @@ const tutorialVideos = [
     type: 'short',
     title: 'Como animar BACKGROUND',
     subtitle: '',
-    youtube: 'https://youtube.com/shorts/r2ZJb_BSoME'
+    youtube: 'https://www.youtube.com/shorts/r2ZJb_BSoME'
   }
 ];
 
@@ -139,25 +140,21 @@ const musicClose = document.getElementById('musicClose');
 const musicMiniPrev = document.getElementById('musicMiniPrev');
 const musicMiniPlay = document.getElementById('musicMiniPlay');
 const musicMiniNext = document.getElementById('musicMiniNext');
+const musicVolume = document.getElementById('musicVolume');
 
-let currentTrack =
-  parseInt(localStorage.getItem('babiMusicTrackV2') || '0', 10);
+let currentTrack = parseInt(localStorage.getItem('babiMusicTrackV2') || '0', 10);
+if (!Number.isFinite(currentTrack) || currentTrack < 0 || currentTrack >= playlist.length) currentTrack = 0;
 
-if (
-  !Number.isFinite(currentTrack) ||
-  currentTrack < 0 ||
-  currentTrack >= playlist.length
-) {
-  currentTrack = 0;
-}
+const storedMusicState = localStorage.getItem('babiMusicWantedV2');
+let musicDesiredPlaying = storedMusicState === null ? true : storedMusicState === 'true';
 
-let musicDesiredPlaying =
-  localStorage.getItem('babiMusicWantedV2') !== 'false';
+const storedVolume = localStorage.getItem('babiMusicVolumeV2');
+let currentVolume = storedVolume === null ? 0.5 : Math.min(1, Math.max(0, parseFloat(storedVolume)));
+if (!Number.isFinite(currentVolume)) currentVolume = 0.5;
 
 let musicWasPlayingBeforeVideo = false;
 
 let currentFilter = 'short';
-
 
 function getYoutubeId(value) {
   if (!value) return null;
@@ -165,50 +162,23 @@ function getYoutubeId(value) {
   const clean = value.trim();
 
   if (!clean || clean.startsWith('COLE_AQUI')) return null;
-
-  if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) {
-    return clean;
-  }
+  if (/^[a-zA-Z0-9_-]{11}$/.test(clean)) return clean;
 
   try {
     const url = new URL(clean);
 
-    if (
-      url.hostname === 'youtu.be' ||
-      url.hostname === 'www.youtu.be'
-    ) {
-      return (
-        url.pathname
-          .split('/')
-          .filter(Boolean)[0] || null
-      );
+    if (url.hostname === 'youtu.be' || url.hostname === 'www.youtu.be') {
+      return url.pathname.split('/').filter(Boolean)[0] || null;
     }
 
-    const watchId =
-      url.searchParams.get('v');
+    const watchId = url.searchParams.get('v');
+    if (watchId) return watchId;
 
-    if (watchId) {
-      return watchId;
-    }
+    const parts = url.pathname.split('/').filter(Boolean);
 
-    const parts =
-      url.pathname
-        .split('/')
-        .filter(Boolean);
-
-    for (
-      const segment of
-      ['shorts', 'embed', 'live']
-    ) {
-      const index =
-        parts.indexOf(segment);
-
-      if (
-        index !== -1 &&
-        parts[index + 1]
-      ) {
-        return parts[index + 1];
-      }
+    for (const segment of ['shorts', 'embed', 'live']) {
+      const index = parts.indexOf(segment);
+      if (index !== -1 && parts[index + 1]) return parts[index + 1];
     }
   } catch (_) {
     return null;
@@ -217,245 +187,108 @@ function getYoutubeId(value) {
   return null;
 }
 
-
 function getYoutubeThumbnail(value) {
-  const id =
-    getYoutubeId(value);
-
+  const id = getYoutubeId(value);
   if (!id) return null;
-
-  return (
-    `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
-  );
+  return `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
 }
 
-
-function applyYoutubeThumbnail(
-  image,
-  youtube,
-  fallback = ''
-) {
+function applyYoutubeThumbnail(image, youtube, fallback = '') {
   if (!image) return;
 
-  const id =
-    getYoutubeId(youtube);
+  const id = getYoutubeId(youtube);
 
   if (!id) {
-    if (fallback) {
-      image.src = fallback;
-    }
-
+    if (fallback) image.src = fallback;
     return;
   }
 
-  image.dataset.youtubeId =
-    id;
+  image.dataset.youtubeId = id;
+  image.dataset.fallbackStage = 'maxres';
+  image.src = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
 
-  image.dataset.fallbackStage =
-    'maxres';
-
-  image.src =
-    `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
-
-  image.addEventListener(
-    'error',
-    () => {
-      if (
-        image.dataset.fallbackStage ===
-        'maxres'
-      ) {
-        image.dataset.fallbackStage =
-          'hq';
-
-        image.src =
-          `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-
-        return;
-      }
-
-      if (
-        fallback &&
-        image.dataset.fallbackStage ===
-        'hq'
-      ) {
-        image.dataset.fallbackStage =
-          'local';
-
-        image.src =
-          fallback;
-      }
+  image.addEventListener('error', () => {
+    if (image.dataset.fallbackStage === 'maxres') {
+      image.dataset.fallbackStage = 'hq';
+      image.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+      return;
     }
-  );
-}
 
+    if (fallback && image.dataset.fallbackStage === 'hq') {
+      image.dataset.fallbackStage = 'local';
+      image.src = fallback;
+    }
+  });
+}
 
 function getYoutubeEmbedUrl(value) {
-  const id =
-    getYoutubeId(value);
-
+  const id = getYoutubeId(value);
   if (!id) return null;
 
-  const params =
-    new URLSearchParams({
-      autoplay: '1',
-      rel: '0',
-      playsinline: '1',
-      controls: '1',
-      fs: '1',
-      iv_load_policy: '3'
-    });
+  const params = new URLSearchParams({
+    autoplay: '1',
+    rel: '0',
+    playsinline: '1',
+    controls: '1',
+    fs: '1',
+    iv_load_policy: '3'
+  });
 
-  return (
-    `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`
-  );
+  return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
 }
-
 
 function getVideoByKey(key) {
-  if (String(key) === 'reel') {
-    return reelVideo;
-  }
-
-  return [
-    ...videos,
-    ...tutorialVideos
-  ].find(
-    video =>
-      String(video.id) === String(key)
-  ) || null;
+  if (String(key) === 'reel') return reelVideo;
+  return [...videos, ...tutorialVideos].find((video) => String(video.id) === String(key)) || null;
 }
 
 
-function getPlaceholderThumbnail(
-  title = 'Tutorial'
-) {
-  const safeTitle =
-    String(title).replace(
-      /[&<>"']/g,
-      char => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-      })[char]
-    );
+function getPlaceholderThumbnail(title = 'Tutorial') {
+  const safeTitle = String(title).replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[char]);
 
   const svg = `
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1280"
-      height="720"
-      viewBox="0 0 1280 720"
-    >
-      <rect
-        width="1280"
-        height="720"
-        fill="#eeeeee"
-      />
-
-      <text
-        x="50%"
-        y="48%"
-        dominant-baseline="middle"
-        text-anchor="middle"
-        fill="#2b2b2b"
-        font-family="Arial, sans-serif"
-        font-size="46"
-      >
-        ${safeTitle}
-      </text>
-
-      <text
-        x="50%"
-        y="57%"
-        dominant-baseline="middle"
-        text-anchor="middle"
-        fill="#777777"
-        font-family="Arial, sans-serif"
-        font-size="20"
-        letter-spacing="4"
-      >
-        EM BREVE
-      </text>
+    <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+      <rect width="1280" height="720" fill="#eeeeee"/>
+      <text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" fill="#2b2b2b" font-family="Arial, sans-serif" font-size="46">${safeTitle}</text>
+      <text x="50%" y="57%" dominant-baseline="middle" text-anchor="middle" fill="#777777" font-family="Arial, sans-serif" font-size="20" letter-spacing="4">EM BREVE</text>
     </svg>
   `;
 
-  return (
-    `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`
-  );
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-
 function createProjectCard(video) {
-  const article =
-    document.createElement('article');
+  const article = document.createElement('article');
+  article.className = `project ${video.type === 'short' ? 'project-short' : 'project-long'}`;
+  article.dataset.format = video.type;
 
-  article.className =
-    `project ${
-      video.type === 'short'
-        ? 'project-short'
-        : 'project-long'
-    }`;
+  const button = document.createElement('button');
+  button.className = 'project-cover js-video';
+  button.dataset.videoKey = video.id;
+  button.setAttribute('aria-label', `Reproduzir ${video.title}`);
 
-  article.dataset.format =
-    video.type;
+  const image = document.createElement('img');
+  image.alt = video.title;
+  image.loading = 'lazy';
+  image.width = 1536;
+  image.height = 864;
+  applyYoutubeThumbnail(image, video.youtube, getPlaceholderThumbnail(video.title));
 
-  const button =
-    document.createElement('button');
 
-  button.className =
-    'project-cover js-video';
+  const play = document.createElement('span');
+  play.className = 'project-play';
+  play.textContent = '▶';
 
-  button.dataset.videoKey =
-    video.id;
+  button.append(image, play);
 
-  button.setAttribute(
-    'aria-label',
-    `Reproduzir ${video.title}`
-  );
-
-  const image =
-    document.createElement('img');
-
-  image.alt =
-    video.title;
-
-  image.loading =
-    'lazy';
-
-  image.width =
-    1536;
-
-  image.height =
-    864;
-
-  applyYoutubeThumbnail(
-    image,
-    video.youtube,
-    getPlaceholderThumbnail(video.title)
-  );
-
-  const play =
-    document.createElement('span');
-
-  play.className =
-    'project-play';
-
-  play.textContent =
-    '▶';
-
-  button.append(
-    image,
-    play
-  );
-
-  const details =
-    document.createElement('div');
-
-  details.className =
-    'project-details';
-
+  const details = document.createElement('div');
+  details.className = 'project-details';
   details.innerHTML = `
     <div>
       <h3>${video.title}</h3>
@@ -463,11 +296,7 @@ function createProjectCard(video) {
     </div>
   `;
 
-  article.append(
-    button,
-    details
-  );
-
+  article.append(button, details);
   return article;
 }
 
@@ -475,1001 +304,442 @@ function createProjectCard(video) {
 function renderProjects() {
   if (!projectGrid) return;
 
-  const visible =
-    videos.filter(
-      video =>
-        video.type === currentFilter
-    );
+  const visible = videos.filter((video) => video.type === currentFilter);
 
-  projectGrid.innerHTML =
-    '';
-
-  visible.forEach(
-    video => {
-      projectGrid.appendChild(
-        createProjectCard(video)
-      );
-    }
-  );
-
-  projectGrid.classList.toggle(
-    'short-grid',
-    currentFilter === 'short'
-  );
+  projectGrid.innerHTML = '';
+  visible.forEach((video) => projectGrid.appendChild(createProjectCard(video)));
+  projectGrid.classList.toggle('short-grid', currentFilter === 'short');
 }
 
 
 function renderTutorials() {
   if (!tutorialGrid) return;
 
-  tutorialGrid.innerHTML =
-    '';
-
-  tutorialVideos.forEach(
-    video => {
-      tutorialGrid.appendChild(
-        createProjectCard(video)
-      );
-    }
-  );
+  tutorialGrid.innerHTML = '';
+  tutorialVideos.forEach((video) => tutorialGrid.appendChild(createProjectCard(video)));
 }
 
+filterButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    currentFilter = button.dataset.filter || 'short';
 
-filterButtons.forEach(
-  button => {
-    button.addEventListener(
-      'click',
-      () => {
-        currentFilter =
-          button.dataset.filter ||
-          'short';
+    filterButtons.forEach((item) => {
+      item.setAttribute('aria-pressed', String(item === button));
+    });
 
-        filterButtons.forEach(
-          item => {
-            item.setAttribute(
-              'aria-pressed',
-              String(item === button)
-            );
-          }
-        );
-
-        renderProjects();
-      }
-    );
-  }
-);
-
+    renderProjects();
+  });
+});
 
 /* =========================================
    MÚSICA
 ========================================= */
 
+function updateVolumeVisual() {
+  if (!musicVolume) return;
+  const percent = Math.round(currentVolume * 100);
+  musicVolume.value = String(percent);
+  musicVolume.style.setProperty('--volume-fill', `${percent}%`);
+}
+
+function setMusicVolume(value) {
+  currentVolume = Math.min(1, Math.max(0, Number(value)));
+  if (backgroundAudio) backgroundAudio.volume = currentVolume;
+  localStorage.setItem('babiMusicVolumeV2', String(currentVolume));
+  updateVolumeVisual();
+}
 
 function updateMusicButton() {
   if (!backgroundAudio) return;
-
-  const symbol =
-    backgroundAudio.paused
-      ? '▶'
-      : '❚❚';
-
-  if (musicPlay) {
-    musicPlay.textContent =
-      symbol;
-  }
-
-  if (musicMiniPlay) {
-    musicMiniPlay.textContent =
-      symbol;
-  }
+  const symbol = backgroundAudio.paused ? '▶' : '❚❚';
+  if (musicPlay) musicPlay.textContent = symbol;
+  if (musicMiniPlay) musicMiniPlay.textContent = symbol;
 }
-
 
 function saveMusicState() {
   if (!backgroundAudio) return;
-
-  localStorage.setItem(
-    'babiMusicTrackV2',
-    String(currentTrack)
-  );
-
-  localStorage.setItem(
-    'babiMusicTimeV2',
-    String(
-      backgroundAudio.currentTime || 0
-    )
-  );
-
-  localStorage.setItem(
-    'babiMusicWantedV2',
-    musicDesiredPlaying
-      ? 'true'
-      : 'false'
-  );
+  localStorage.setItem('babiMusicTrackV2', String(currentTrack));
+  localStorage.setItem('babiMusicTimeV2', String(backgroundAudio.currentTime || 0));
+  localStorage.setItem('babiMusicWantedV2', musicDesiredPlaying ? 'true' : 'false');
+  localStorage.setItem('babiMusicVolumeV2', String(currentVolume));
 }
 
-
-function loadMusic(
-  index,
-  restoreTime = false
-) {
+function loadMusic(index, restoreTime = false) {
   if (!backgroundAudio) return;
 
-  currentTrack =
-    (
-      index +
-      playlist.length
-    ) %
-    playlist.length;
-
-  const track =
-    playlist[currentTrack];
+  currentTrack = (index + playlist.length) % playlist.length;
+  const track = playlist[currentTrack];
 
   backgroundAudio.pause();
+  backgroundAudio.src = track.src;
+  backgroundAudio.preload = 'auto';
+  backgroundAudio.volume = currentVolume;
 
-  backgroundAudio.src =
-    track.src;
+  if (musicCover) musicCover.src = track.cover;
+  if (musicTitle) musicTitle.textContent = track.title;
 
-  backgroundAudio.preload =
-    'auto';
-
-  if (musicCover) {
-    musicCover.src =
-      track.cover;
-  }
-
-  if (musicTitle) {
-    musicTitle.textContent =
-      track.title;
-  }
-
-  localStorage.setItem(
-    'babiMusicTrackV2',
-    String(currentTrack)
-  );
+  localStorage.setItem('babiMusicTrackV2', String(currentTrack));
 
   if (restoreTime) {
-    const savedTime =
-      parseFloat(
-        localStorage.getItem(
-          'babiMusicTimeV2'
-        ) || '0'
-      );
-
-    backgroundAudio.addEventListener(
-      'loadedmetadata',
-      () => {
-        if (
-          savedTime > 0 &&
-          savedTime <
-            backgroundAudio.duration
-        ) {
-          backgroundAudio.currentTime =
-            savedTime;
-        }
-      },
-      {
-        once: true
+    const savedTime = parseFloat(localStorage.getItem('babiMusicTimeV2') || '0');
+    backgroundAudio.addEventListener('loadedmetadata', () => {
+      if (savedTime > 0 && savedTime < backgroundAudio.duration) {
+        backgroundAudio.currentTime = savedTime;
       }
-    );
+    }, { once: true });
   } else {
-    localStorage.setItem(
-      'babiMusicTimeV2',
-      '0'
-    );
+    localStorage.setItem('babiMusicTimeV2', '0');
   }
 
   backgroundAudio.load();
-
   updateMusicButton();
 }
-
 
 async function playMusic() {
   if (!backgroundAudio) return;
 
-  musicDesiredPlaying =
-    true;
-
-  localStorage.setItem(
-    'babiMusicWantedV2',
-    'true'
-  );
+  musicDesiredPlaying = true;
+  localStorage.setItem('babiMusicWantedV2', 'true');
 
   try {
     await backgroundAudio.play();
   } catch (_) {
-    // Alguns navegadores só liberam
-    // áudio após a primeira interação.
+    // Alguns navegadores só liberam áudio após a primeira interação.
   }
 
   updateMusicButton();
 }
-
 
 function pauseMusic() {
   if (!backgroundAudio) return;
-
-  musicDesiredPlaying =
-    false;
-
-  localStorage.setItem(
-    'babiMusicWantedV2',
-    'false'
-  );
-
+  musicDesiredPlaying = false;
+  localStorage.setItem('babiMusicWantedV2', 'false');
   backgroundAudio.pause();
-
   updateMusicButton();
 }
 
-
 function toggleMusic() {
   if (!backgroundAudio) return;
-
-  if (backgroundAudio.paused) {
-    playMusic();
-  } else {
-    pauseMusic();
-  }
+  if (backgroundAudio.paused) playMusic();
+  else pauseMusic();
 }
-
 
 function changeTrack(direction) {
-  const shouldPlay =
-    musicDesiredPlaying;
-
-  loadMusic(
-    currentTrack + direction,
-    false
-  );
+  const shouldPlay = musicDesiredPlaying;
+  loadMusic(currentTrack + direction, false);
 
   if (shouldPlay) {
-    backgroundAudio?.addEventListener(
-      'canplay',
-      () => playMusic(),
-      {
-        once: true
-      }
-    );
+    backgroundAudio?.addEventListener('canplay', () => playMusic(), { once: true });
   }
 }
 
-
-function nextMusic() {
-  changeTrack(1);
-}
-
-
-function previousMusic() {
-  changeTrack(-1);
-}
-
+function nextMusic() { changeTrack(1); }
+function previousMusic() { changeTrack(-1); }
 
 function showMiniPlayer() {
-  if (
-    !musicPlayer ||
-    !musicPlayerMini
-  ) {
-    return;
-  }
+  if (!musicPlayer || !musicPlayerMini) return;
 
-  localStorage.setItem(
-    'babiMusicMinimizedV2',
-    'true'
-  );
+  localStorage.setItem('babiMusicMinimizedV2', 'true');
+  musicPlayer.classList.add('is-fading-out');
 
-  musicPlayer.classList.add(
-    'is-fading-out'
-  );
+  setTimeout(() => {
+    musicPlayer.classList.add('is-hidden');
+    musicPlayer.classList.remove('is-fading-out');
 
-  setTimeout(
-    () => {
-      musicPlayer.classList.add(
-        'is-hidden'
-      );
+    musicPlayerMini.classList.remove('is-hidden', 'is-rising');
+    musicPlayerMini.classList.add('is-dropping');
 
-      musicPlayer.classList.remove(
-        'is-fading-out'
-      );
-
-      musicPlayerMini.classList.remove(
-        'is-hidden',
-        'is-rising'
-      );
-
-      musicPlayerMini.classList.add(
-        'is-dropping'
-      );
-
-      setTimeout(
-        () => {
-          musicPlayerMini.classList.remove(
-            'is-dropping'
-          );
-        },
-        350
-      );
-    },
-    180
-  );
+    setTimeout(() => musicPlayerMini.classList.remove('is-dropping'), 350);
+  }, 180);
 }
-
 
 function showMainPlayer() {
-  if (
-    !musicPlayer ||
-    !musicPlayerMini
-  ) {
-    return;
-  }
+  if (!musicPlayer || !musicPlayerMini) return;
 
-  localStorage.setItem(
-    'babiMusicMinimizedV2',
-    'false'
-  );
+  localStorage.setItem('babiMusicMinimizedV2', 'false');
+  musicPlayerMini.classList.remove('is-dropping');
+  musicPlayerMini.classList.add('is-rising');
 
-  musicPlayerMini.classList.remove(
-    'is-dropping'
-  );
+  setTimeout(() => {
+    musicPlayerMini.classList.add('is-hidden');
+    musicPlayerMini.classList.remove('is-rising');
 
-  musicPlayerMini.classList.add(
-    'is-rising'
-  );
+    musicPlayer.classList.remove('is-hidden');
+    musicPlayer.classList.add('is-fading-in');
 
-  setTimeout(
-    () => {
-      musicPlayerMini.classList.add(
-        'is-hidden'
-      );
-
-      musicPlayerMini.classList.remove(
-        'is-rising'
-      );
-
-      musicPlayer.classList.remove(
-        'is-hidden'
-      );
-
-      musicPlayer.classList.add(
-        'is-fading-in'
-      );
-
-      setTimeout(
-        () => {
-          musicPlayer.classList.remove(
-            'is-fading-in'
-          );
-        },
-        300
-      );
-    },
-    230
-  );
+    setTimeout(() => musicPlayer.classList.remove('is-fading-in'), 300);
+  }, 230);
 }
 
+musicPlay?.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  toggleMusic();
+});
 
-musicPlay?.addEventListener(
-  'click',
-  event => {
-    event.preventDefault();
-    event.stopPropagation();
+musicMiniPlay?.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  toggleMusic();
+});
 
-    toggleMusic();
-  }
-);
+musicVolume?.addEventListener('input', (event) => {
+  setMusicVolume(Number(event.target.value) / 100);
+});
 
+musicNext?.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  nextMusic();
+});
 
-musicMiniPlay?.addEventListener(
-  'click',
-  event => {
-    event.preventDefault();
-    event.stopPropagation();
+musicMiniNext?.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  nextMusic();
+});
 
-    toggleMusic();
-  }
-);
+musicPrev?.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  previousMusic();
+});
 
+musicMiniPrev?.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  previousMusic();
+});
 
-musicNext?.addEventListener(
-  'click',
-  event => {
-    event.preventDefault();
-    event.stopPropagation();
+musicClose?.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  showMiniPlayer();
+});
 
-    nextMusic();
-  }
-);
+musicPlayerMini?.addEventListener('click', (event) => {
+  if (event.target.closest('button')) return;
+  showMainPlayer();
+});
 
+backgroundAudio?.addEventListener('ended', () => {
+  const shouldPlay = musicDesiredPlaying;
+  loadMusic(currentTrack + 1, false);
+  if (shouldPlay) backgroundAudio?.addEventListener('canplay', () => playMusic(), { once: true });
+});
 
-musicMiniNext?.addEventListener(
-  'click',
-  event => {
-    event.preventDefault();
-    event.stopPropagation();
+backgroundAudio?.addEventListener('play', updateMusicButton);
+backgroundAudio?.addEventListener('pause', updateMusicButton);
+backgroundAudio?.addEventListener('timeupdate', saveMusicState);
 
-    nextMusic();
-  }
-);
-
-
-musicPrev?.addEventListener(
-  'click',
-  event => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    previousMusic();
-  }
-);
-
-
-musicMiniPrev?.addEventListener(
-  'click',
-  event => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    previousMusic();
-  }
-);
-
-
-musicClose?.addEventListener(
-  'click',
-  event => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    showMiniPlayer();
-  }
-);
-
-
-musicPlayerMini?.addEventListener(
-  'click',
-  event => {
-    if (
-      event.target.closest('button')
-    ) {
-      return;
-    }
-
-    showMainPlayer();
-  }
-);
-
-
-backgroundAudio?.addEventListener(
-  'ended',
-  () => {
-    const shouldPlay =
-      musicDesiredPlaying;
-
-    loadMusic(
-      currentTrack + 1,
-      false
-    );
-
-    if (shouldPlay) {
-      backgroundAudio?.addEventListener(
-        'canplay',
-        () => playMusic(),
-        {
-          once: true
-        }
-      );
-    }
-  }
-);
-
-
-backgroundAudio?.addEventListener(
-  'play',
-  updateMusicButton
-);
-
-
-backgroundAudio?.addEventListener(
-  'pause',
-  updateMusicButton
-);
-
-
-backgroundAudio?.addEventListener(
-  'timeupdate',
-  saveMusicState
-);
-
-
-/* =========================================
-   MODAL DOS VÍDEOS
-========================================= */
-
-
-const videoDialog =
-  document.getElementById(
-    'videoDialog'
-  );
-
-const videoDialogTitle =
-  document.getElementById(
-    'videoDialogTitle'
-  );
-
-const youtubePlayer =
-  document.getElementById(
-    'youtubePlayer'
-  );
-
+const videoDialog = document.getElementById('videoDialog');
+const videoDialogTitle = document.getElementById('videoDialogTitle');
+const youtubePlayer = document.getElementById('youtubePlayer');
 
 function openVideo(video) {
-  if (
-    !videoDialog ||
-    !youtubePlayer ||
-    !video
-  ) {
-    return;
-  }
+  if (!videoDialog || !youtubePlayer || !video) return;
 
-  const embedUrl =
-    getYoutubeEmbedUrl(
-      video.youtube
-    );
+  const embedUrl = getYoutubeEmbedUrl(video.youtube);
 
   if (!embedUrl) {
-    console.warn(
-      `Adicione um link válido do YouTube ao vídeo "${video.title}" em script.js.`
-    );
-
+    console.warn(`Adicione um link válido do YouTube ao vídeo "${video.title}" em script.js.`);
     return;
   }
 
-  musicWasPlayingBeforeVideo =
-    Boolean(
-      backgroundAudio &&
-      !backgroundAudio.paused
-    );
-
-  if (
-    musicWasPlayingBeforeVideo &&
-    backgroundAudio
-  ) {
+  musicWasPlayingBeforeVideo = Boolean(backgroundAudio && !backgroundAudio.paused);
+  if (musicWasPlayingBeforeVideo && backgroundAudio) {
     backgroundAudio.pause();
-
     updateMusicButton();
   }
 
-  if (videoDialogTitle) {
-    videoDialogTitle.textContent =
-      video.title;
-  }
+  if (videoDialogTitle) videoDialogTitle.textContent = video.title;
 
-  youtubePlayer.src =
-    embedUrl;
-
-  videoDialog.classList.add(
-    'open'
-  );
-
-  videoDialog.setAttribute(
-    'aria-hidden',
-    'false'
-  );
-
-  document.body.style.overflow =
-    'hidden';
+  youtubePlayer.src = embedUrl;
+  videoDialog.classList.add('open');
+  videoDialog.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
 }
 
+document.addEventListener('click', (event) => {
+  const trigger = event.target.closest('.js-video');
+  if (!trigger) return;
 
-document.addEventListener(
-  'click',
-  event => {
-    const trigger =
-      event.target.closest(
-        '.js-video'
-      );
+  const video = getVideoByKey(trigger.dataset.videoKey);
+  openVideo(video);
+});
 
-    if (!trigger) return;
+const contactDialog = document.getElementById('contactDialog');
 
-    const video =
-      getVideoByKey(
-        trigger.dataset.videoKey
-      );
-
-    openVideo(video);
-  }
-);
-
-
-const contactDialog =
-  document.getElementById(
-    'contactDialog'
-  );
-
-
-document
-  .querySelectorAll('.js-contact')
-  .forEach(
-    button => {
-      button.addEventListener(
-        'click',
-        () => {
-          contactDialog?.classList.add(
-            'open'
-          );
-
-          contactDialog?.setAttribute(
-            'aria-hidden',
-            'false'
-          );
-        }
-      );
-    }
-  );
-
+document.querySelectorAll('.js-contact').forEach((button) => {
+  button.addEventListener('click', () => {
+    contactDialog?.classList.add('open');
+    contactDialog?.setAttribute('aria-hidden', 'false');
+  });
+});
 
 function closeDialog(dialog) {
   if (!dialog) return;
 
-  dialog.classList.remove(
-    'open'
-  );
+  dialog.classList.remove('open');
+  dialog.setAttribute('aria-hidden', 'true');
 
-  dialog.setAttribute(
-    'aria-hidden',
-    'true'
-  );
+  if (dialog === videoDialog && youtubePlayer) {
+    youtubePlayer.src = '';
+    document.body.style.overflow = '';
 
-  if (
-    dialog === videoDialog &&
-    youtubePlayer
-  ) {
-    youtubePlayer.src =
-      '';
-
-    document.body.style.overflow =
-      '';
-
-    if (
-      musicWasPlayingBeforeVideo &&
-      musicDesiredPlaying
-    ) {
+    if (musicWasPlayingBeforeVideo && musicDesiredPlaying) {
       playMusic();
     }
-
-    musicWasPlayingBeforeVideo =
-      false;
+    musicWasPlayingBeforeVideo = false;
   }
 }
 
+document.querySelectorAll('[data-close]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const dialog = document.getElementById(button.dataset.close);
+    closeDialog(dialog);
+  });
+});
 
-document
-  .querySelectorAll('[data-close]')
-  .forEach(
-    button => {
-      button.addEventListener(
-        'click',
-        () => {
-          const dialog =
-            document.getElementById(
-              button.dataset.close
-            );
+[videoDialog, contactDialog].forEach((dialog) => {
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) closeDialog(dialog);
+  });
+});
 
-          closeDialog(dialog);
-        }
-      );
-    }
-  );
-
-
-[videoDialog, contactDialog]
-  .forEach(
-    dialog => {
-      dialog?.addEventListener(
-        'click',
-        event => {
-          if (
-            event.target === dialog
-          ) {
-            closeDialog(dialog);
-          }
-        }
-      );
-    }
-  );
-
-
-document.addEventListener(
-  'keydown',
-  event => {
-    if (
-      event.key !== 'Escape'
-    ) {
-      return;
-    }
-
-    document
-      .querySelectorAll(
-        '.dialog-backdrop.open'
-      )
-      .forEach(
-        closeDialog
-      );
-  }
-);
-
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  document.querySelectorAll('.dialog-backdrop.open').forEach(closeDialog);
+});
 
 /* =========================================
    INICIAR / RESTAURAR PLAYER
 ========================================= */
 
+loadMusic(currentTrack, true);
+setMusicVolume(currentVolume);
 
-loadMusic(
-  currentTrack,
-  true
-);
-
-
-const isMusicMinimized =
-  localStorage.getItem(
-    'babiMusicMinimizedV2'
-  ) === 'true';
-
-
+const isMusicMinimized = localStorage.getItem('babiMusicMinimizedV2') === 'true';
 if (isMusicMinimized) {
-  musicPlayer?.classList.add(
-    'is-hidden'
-  );
-
-  musicPlayerMini?.classList.remove(
-    'is-hidden'
-  );
+  musicPlayer?.classList.add('is-hidden');
+  musicPlayerMini?.classList.remove('is-hidden');
 } else {
-  musicPlayer?.classList.remove(
-    'is-hidden'
-  );
-
-  musicPlayerMini?.classList.add(
-    'is-hidden'
-  );
+  musicPlayer?.classList.remove('is-hidden');
+  musicPlayerMini?.classList.add('is-hidden');
 }
 
-
 async function tryAutoplayMusic() {
-  if (
-    !musicDesiredPlaying ||
-    !backgroundAudio
-  ) {
-    return;
-  }
-
+  if (!musicDesiredPlaying || !backgroundAudio) return;
   try {
     await backgroundAudio.play();
   } catch (_) {
-    // O navegador pode exigir
-    // a primeira interação.
+    // O navegador pode exigir a primeira interação do visitante.
   }
-
   updateMusicButton();
 }
 
-
-backgroundAudio?.addEventListener(
-  'canplay',
-  tryAutoplayMusic,
-  {
-    once: true
-  }
-);
-
-
+backgroundAudio?.addEventListener('canplay', tryAutoplayMusic, { once: true });
 tryAutoplayMusic();
 
-
 async function unlockMusicOnFirstInteraction() {
-  if (
-    !musicDesiredPlaying ||
-    !backgroundAudio ||
-    !backgroundAudio.paused
-  ) {
-    return;
-  }
+  if (!musicDesiredPlaying || !backgroundAudio || !backgroundAudio.paused) return;
 
   try {
     await backgroundAudio.play();
-
     updateMusicButton();
-
-    document.removeEventListener(
-      'pointerdown',
-      unlockMusicOnFirstInteraction
-    );
-
-    document.removeEventListener(
-      'keydown',
-      unlockMusicOnFirstInteraction
-    );
-  } catch (_) {
-  }
+    document.removeEventListener('pointerdown', unlockMusicOnFirstInteraction);
+    document.removeEventListener('keydown', unlockMusicOnFirstInteraction);
+  } catch (_) {}
 }
 
-
-document.addEventListener(
-  'pointerdown',
-  unlockMusicOnFirstInteraction
-);
-
-
-document.addEventListener(
-  'keydown',
-  unlockMusicOnFirstInteraction
-);
-
-
-window.addEventListener(
-  'beforeunload',
-  saveMusicState
-);
+document.addEventListener('pointerdown', unlockMusicOnFirstInteraction);
+document.addEventListener('keydown', unlockMusicOnFirstInteraction);
+window.addEventListener('beforeunload', saveMusicState);
+window.addEventListener('pagehide', saveMusicState);
 
 
 /* =========================================
-   REEL PRINCIPAL
-   AUTOPLAY / PAUSA NO SCROLL
+   REEL PRINCIPAL — AUTOPLAY / PAUSA NO SCROLL
 ========================================= */
-
 
 let reelPlayer = null;
 let reelPlayerReady = false;
 let reelVisible = true;
 
-
 function setupReelPlayer() {
-  const reelId =
-    getYoutubeId(
-      reelVideo.youtube
-    );
+  const reelId = getYoutubeId(reelVideo.youtube);
 
-  if (
-    !reelId ||
-    !reelYoutube
-  ) {
-    if (reelYoutube) {
-      reelYoutube.classList.add(
-        'is-empty'
-      );
-    }
-
+  if (!reelId || !reelYoutube) {
+    if (reelYoutube) reelYoutube.classList.add('is-empty');
     return;
   }
 
+  const startPlayer = () => {
+    reelPlayer = new YT.Player('reelYoutube', {
+      videoId: reelId,
+      playerVars: {
+        autoplay: 1,
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        loop: 1,
+        playlist: reelId,
+        modestbranding: 1,
+        playsinline: 1,
+        rel: 0
+      },
+      events: {
+        onReady(event) {
+          reelPlayerReady = true;
+          event.target.mute();
 
-  const startPlayer =
-    () => {
-      reelPlayer =
-        new YT.Player(
-          'reelYoutube',
-          {
-            videoId: reelId,
-
-            playerVars: {
-              autoplay: 1,
-              controls: 0,
-              disablekb: 1,
-              fs: 0,
-              loop: 1,
-              playlist: reelId,
-              modestbranding: 1,
-              playsinline: 1,
-              rel: 0
-            },
-
-            events: {
-              onReady(event) {
-                reelPlayerReady =
-                  true;
-
-                event.target.mute();
-
-                if (reelVisible) {
-                  event.target.playVideo();
-                } else {
-                  event.target.pauseVideo();
-                }
-              }
-            }
+          if (reelVisible) {
+            event.target.playVideo();
+          } else {
+            event.target.pauseVideo();
           }
-        );
-    };
+        }
+      }
+    });
+  };
 
-
-  if (
-    window.YT &&
-    window.YT.Player
-  ) {
+  if (window.YT && window.YT.Player) {
     startPlayer();
   } else {
-    const previousReady =
-      window.onYouTubeIframeAPIReady;
+    const previousReady = window.onYouTubeIframeAPIReady;
 
-    window.onYouTubeIframeAPIReady =
-      () => {
-        if (
-          typeof previousReady ===
-          'function'
-        ) {
-          previousReady();
-        }
+    window.onYouTubeIframeAPIReady = () => {
+      if (typeof previousReady === 'function') previousReady();
+      startPlayer();
+    };
 
-        startPlayer();
-      };
-
-
-    if (
-      !document.querySelector(
-        'script[data-youtube-api]'
-      )
-    ) {
-      const tag =
-        document.createElement(
-          'script'
-        );
-
-      tag.src =
-        'https://www.youtube.com/iframe_api';
-
-      tag.dataset.youtubeApi =
-        'true';
-
-      document.head.appendChild(
-        tag
-      );
+    if (!document.querySelector('script[data-youtube-api]')) {
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      tag.dataset.youtubeApi = 'true';
+      document.head.appendChild(tag);
     }
   }
 
-
   if (reelFrame) {
-    const reelObserver =
-      new IntersectionObserver(
-        entries => {
-          const entry =
-            entries[0];
+    const reelObserver = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      reelVisible = entry.isIntersecting && entry.intersectionRatio >= 0.25;
 
-          reelVisible =
-            entry.isIntersecting &&
-            entry.intersectionRatio >=
-              0.25;
+      if (!reelPlayerReady || !reelPlayer) return;
 
-          if (
-            !reelPlayerReady ||
-            !reelPlayer
-          ) {
-            return;
-          }
+      if (reelVisible) {
+        reelPlayer.mute();
+        reelPlayer.playVideo();
+      } else {
+        reelPlayer.pauseVideo();
+      }
+    }, { threshold: [0, 0.25, 0.5, 1] });
 
-          if (reelVisible) {
-            reelPlayer.mute();
-
-            reelPlayer.playVideo();
-          } else {
-            reelPlayer.pauseVideo();
-          }
-        },
-        {
-          threshold:
-            [0, 0.25, 0.5, 1]
-        }
-      );
-
-    reelObserver.observe(
-      reelFrame
-    );
+    reelObserver.observe(reelFrame);
   }
 }
 
-
 setupReelPlayer();
-
 renderProjects();
-
 renderTutorials();
