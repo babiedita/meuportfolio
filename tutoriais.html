@@ -7,37 +7,35 @@
   <title>Tutoriais — Bárbara Eichenberg</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="https://use.typekit.net/ndv3lae.css">
-  <link rel="stylesheet" href="style.css?v=1000">
+  <link rel="stylesheet" href="style.css?v=1300">
 </head>
 <body data-page="tutoriais">
-  <!-- PLAYER DE MÚSICA -->
+  <div class="site-loader" id="siteLoader">
+    <div class="loader-content">
+      <video class="loader-video" autoplay muted loop playsinline preload="auto">
+        <source src="loading.mp4" type="video/mp4">
+      </video>
+      <div class="loader-progress">
+        <div class="loader-progress-fill" id="loaderProgress"></div>
+      </div>
+      <p class="loader-text" id="loaderText">carregando vídeos</p>
+    </div>
+  </div>
+
   <div class="music-player" id="musicPlayer">
     <img class="music-cover" id="musicCover" src="covers/miimaker.png" alt="">
-
     <div class="music-info">
       <span class="music-now">Você está ouvindo agora:</span>
       <span class="music-title" id="musicTitle">Mii Maker Editing Mii</span>
     </div>
-
     <div class="music-controls">
       <button class="music-control" id="musicPrev" type="button" aria-label="Música anterior">◀◀</button>
       <button class="music-control music-play" id="musicPlay" type="button" aria-label="Tocar ou pausar">▶</button>
       <button class="music-control" id="musicNext" type="button" aria-label="Próxima música">▶▶</button>
     </div>
-
     <div class="music-volume-wrap" aria-label="Controle de volume">
-      <input
-        class="music-volume"
-        id="musicVolume"
-        type="range"
-        min="0"
-        max="100"
-        value="50"
-        step="1"
-        aria-label="Volume da música"
-      >
+      <input class="music-volume" id="musicVolume" type="range" min="0" max="100" value="50" step="1" aria-label="Volume da música">
     </div>
-
     <button class="music-close" id="musicClose" type="button" aria-label="Minimizar player">×</button>
     <audio id="backgroundAudio" preload="auto"></audio>
   </div>
@@ -59,21 +57,12 @@
 
     <main>
       <section class="projects-section tutorials-projects page-width" aria-labelledby="tutorials-title">
-        <div class="section-eyebrow">
-          <span>01 / TUTORIAIS</span>
-          <span>EDIÇÃO, PROCESSO E DICAS</span>
-        </div>
-
+        <div class="section-eyebrow"><span>01 / TUTORIAIS</span><span>EDIÇÃO, PROCESSO E DICAS</span></div>
         <div class="projects-heading">
           <h2 id="tutorials-title">Tutoriais<span class="title-dot">.</span></h2>
         </div>
-
         <div class="project-grid" id="tutorialGrid"></div>
-
-        <div class="project-footnote">
-          <span>Vídeos separados do portfólio, com a mesma grade visual.</span>
-          <span aria-hidden="true">＋</span>
-        </div>
+        <div class="project-footnote"><span>Vídeos separados do portfólio, com a mesma grade visual.</span><span aria-hidden="true">＋</span></div>
       </section>
     </main>
   </div>
@@ -86,6 +75,6 @@
     </div>
   </div>
 
-  <script src="script.js?v=1000"></script>
+  <script src="script.js?v=1300"></script>
 </body>
 </html>
