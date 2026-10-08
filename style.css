@@ -32,3 +32,16 @@ html,body,body *{cursor:url("cursor-arrow.png") 0 0,auto}a,button,.project-cover
 
 @media(max-width:700px){.page-width{padding-inline:22px}.site-header{height:80px}.site-header nav{display:none}.intro{padding-top:40px}.intro-eyebrow{font-size:8px;letter-spacing:1px}.intro-title-image{width:min(520px,86vw);margin-bottom:4px}.intro>p{max-width:340px;margin-inline:auto;font-size:16px}.desktop-break{display:none}.reel-wrap{margin-top:35px}.reel-frame{aspect-ratio:16/9}.reel-sticker{right:-8px;top:-16px;padding:7px 10px;font-size:15px}.reel-alien{left:-18px;bottom:-30px;width:75px}.reel-topline{top:15px;right:15px;font-size:6px}.projects-heading{flex-direction:column;align-items:flex-start}h2{font-size:34px}.project-grid,.project-grid.short-grid,.project-grid.long-grid,#tutorialGrid{grid-template-columns:1fr}.project-grid{gap:32px}.music-player{top:12px;left:50%;right:auto;width:calc(100vw - 28px);height:66px;grid-template-columns:44px minmax(70px,1fr) 82px 48px;gap:7px;padding:7px 32px 7px 9px;border-radius:16px;transform:translateX(-50%)}.music-player.is-fading-out{transform:translateX(-50%) translateY(-10px)}.music-cover{width:44px;height:44px;border-radius:9px}.music-now{font-size:9px}.music-title{font-size:16px}.music-controls{width:82px;gap:8px}.music-control{font-size:12px}.music-play{font-size:21px}.music-volume-wrap,.music-volume{width:48px}.music-player-mini{top:12px;left:50%;right:auto;transform:translateX(-50%)}.loader-content{width:calc(100vw - 44px)}.loader-video{width:190px;margin-bottom:32px}.loader-text{font-size:17px;margin-top:18px}@keyframes musicMainFadeIn{from{opacity:0;transform:translateX(-50%) translateY(9px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes musicMiniDrop{from{opacity:0;transform:translateX(-50%) translateY(-70px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes musicMiniRise{from{opacity:1;transform:translateX(-50%) translateY(0)}to{opacity:0;transform:translateX(-50%) translateY(-60px)}}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation-duration:.01ms!important}}
+
+
+/* =========================================
+   BOTÃO CURTIR
+========================================= */
+.like-button{position:fixed;z-index:1500;left:24px;bottom:22px;width:150px;height:auto;margin:0;padding:0;border:0;background:transparent;transform:rotate(-3deg);transform-origin:center;transition:transform .14s ease,filter .14s ease,opacity .18s ease;user-select:none;-webkit-user-select:none}
+.like-button img{display:block;width:100%;height:auto;pointer-events:none;user-select:none;-webkit-user-drag:none;filter:drop-shadow(0 7px 12px rgba(0,0,0,.10))}
+.like-button:hover{transform:rotate(-3deg) scale(1.035)}
+.like-button.is-pressing{transform:rotate(-1deg) scale(.94)}
+.like-button.is-liked{animation:likePop .38s cubic-bezier(.2,.8,.3,1.35)}
+@keyframes likePop{0%{transform:rotate(-3deg) scale(.94)}55%{transform:rotate(2deg) scale(1.10)}100%{transform:rotate(-3deg) scale(1)}}
+body.is-loading .like-button{opacity:0;pointer-events:none}
+@media(max-width:700px){.like-button{left:14px;bottom:14px;width:110px}}

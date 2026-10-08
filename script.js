@@ -57,6 +57,51 @@ window.addEventListener('load', () => {
   setTimeout(finishSiteLoading, remainingTime);
 });
 
+
+
+/* =========================================
+   BOTÃO CURTIR
+========================================= */
+const likeButton=document.getElementById('likeButton');
+const likeButtonImage=document.getElementById('likeButtonImage');
+const LIKE_IMAGES={normal:'curtir-1.png',pressed:'curtir-2.png',liked:'curtir-3.png'};
+let portfolioLiked=localStorage.getItem('babiPortfolioLiked')==='true';
+let likePointerActive=false;
+
+function renderLikeButton(){
+  if(!likeButton||!likeButtonImage)return;
+  likeButtonImage.src=portfolioLiked?LIKE_IMAGES.liked:LIKE_IMAGES.normal;
+  likeButton.setAttribute('aria-pressed',String(portfolioLiked));
+  likeButton.setAttribute('aria-label',portfolioLiked?'Remover curtida do portfólio':'Curtir o portfólio');
+}
+function showPressedLikeState(){
+  if(!likeButton||!likeButtonImage)return;
+  likeButton.classList.add('is-pressing');
+  likeButtonImage.src=LIKE_IMAGES.pressed;
+}
+function releaseLikeVisual(){if(likeButton)likeButton.classList.remove('is-pressing')}
+function toggleLike(){
+  if(!likeButton||!likeButtonImage)return;
+  portfolioLiked=!portfolioLiked;
+  localStorage.setItem('babiPortfolioLiked',String(portfolioLiked));
+  releaseLikeVisual();
+  likeButtonImage.src=portfolioLiked?LIKE_IMAGES.liked:LIKE_IMAGES.normal;
+  likeButton.setAttribute('aria-pressed',String(portfolioLiked));
+  likeButton.setAttribute('aria-label',portfolioLiked?'Remover curtida do portfólio':'Curtir o portfólio');
+  if(portfolioLiked){
+    likeButton.classList.remove('is-liked');
+    void likeButton.offsetWidth;
+    likeButton.classList.add('is-liked');
+    setTimeout(()=>likeButton.classList.remove('is-liked'),420);
+  }
+}
+likeButton?.addEventListener('pointerdown',event=>{if(event.pointerType==='mouse'&&event.button!==0)return;likePointerActive=true;showPressedLikeState()});
+likeButton?.addEventListener('pointerup',()=>releaseLikeVisual());
+likeButton?.addEventListener('pointerleave',()=>{releaseLikeVisual();if(likePointerActive)renderLikeButton();likePointerActive=false});
+likeButton?.addEventListener('pointercancel',()=>{releaseLikeVisual();renderLikeButton();likePointerActive=false});
+likeButton?.addEventListener('click',()=>{toggleLike();likePointerActive=false});
+renderLikeButton();
+
 const reelVideo = {
   id: 'reel',
   type: 'long',
