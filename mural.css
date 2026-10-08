@@ -1,0 +1,752 @@
+/* =========================================
+   MURAL — ESTIVE AQUI
+========================================= */
+
+.mural-page {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #ffffff;
+}
+
+
+/* acessibilidade */
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+
+/* =========================================
+   ESTRUTURA
+========================================= */
+
+.mural-shell {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding:
+    34px
+    6vw
+    135px;
+}
+
+
+/* =========================================
+   TÍTULO MURAL.PNG
+========================================= */
+
+.mural-title-link {
+  position: relative;
+  z-index: 4;
+
+  display: block;
+
+  width: fit-content;
+
+  margin:
+    18px auto 0;
+}
+
+
+.mural-title-image {
+  display: block;
+
+  width:
+    min(
+      390px,
+      55vw
+    );
+
+  height: auto;
+
+  object-fit: contain;
+}
+
+
+/* =========================================
+   BOTÃO INFO
+========================================= */
+
+.mural-info-button {
+  position: fixed;
+
+  z-index: 1250;
+
+  top: 104px;
+  right: 26px;
+
+  width: 52px;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  transform-origin: center;
+
+  transition:
+    transform .12s ease;
+}
+
+
+.mural-info-button img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  pointer-events: none;
+
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+
+.mural-info-button:hover {
+  transform:
+    scale(1.045);
+}
+
+
+.mural-info-button.is-pressing {
+  transform:
+    scale(.92);
+}
+
+
+/* =========================================
+   MURO DE NICKS
+========================================= */
+
+.nick-wall {
+  position: relative;
+
+  z-index: 2;
+
+  width:
+    min(
+      1180px,
+      88vw
+    );
+
+  min-height:
+    calc(
+      100vh - 390px
+    );
+
+  margin:
+    36px auto 0;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      5,
+      minmax(120px, 1fr)
+    );
+
+  align-content: center;
+
+  gap:
+    30px
+    24px;
+
+  padding:
+    30px
+    10px;
+}
+
+
+.mural-empty {
+  grid-column:
+    1 / -1;
+
+  margin: 0;
+
+  color:
+    rgba(43,43,43,.30);
+
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 300;
+
+  text-align: center;
+}
+
+
+/* cada nick recebe pequenas variações pelo JS */
+
+.mural-nick {
+  position: relative;
+
+  display: block;
+
+  max-width: 100%;
+
+  color:
+    #2b2b2b;
+
+  font-family:
+    "Courier New",
+    monospace;
+
+  font-size:
+    var(
+      --nick-size,
+      22px
+    );
+
+  font-weight: 700;
+
+  line-height: 1.05;
+
+  text-align: center;
+
+  overflow-wrap: anywhere;
+
+  transform:
+    translateY(
+      var(
+        --nick-y,
+        0px
+      )
+    )
+    rotate(
+      var(
+        --nick-rotate,
+        0deg
+      )
+    );
+
+  opacity: .92;
+}
+
+
+.mural-nick.is-new {
+  animation:
+    muralNickPop
+    .48s
+    cubic-bezier(.2,.82,.25,1.25)
+    both;
+}
+
+
+@keyframes muralNickPop {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      rotate(
+        var(
+          --nick-rotate,
+          0deg
+        )
+      )
+      scale(.78);
+  }
+
+  to {
+    opacity: .92;
+
+    transform:
+      translateY(
+        var(
+          --nick-y,
+          0px
+        )
+      )
+      rotate(
+        var(
+          --nick-rotate,
+          0deg
+        )
+      )
+      scale(1);
+  }
+
+}
+
+
+/* =========================================
+   CAMPO DE TEXTO
+========================================= */
+
+.mural-entry-area {
+  position: fixed;
+
+  z-index: 1100;
+
+  left: 50%;
+  bottom: 42px;
+
+  width:
+    min(
+      570px,
+      calc(
+        100vw - 44px
+      )
+    );
+
+  transform:
+    translateX(-50%);
+}
+
+
+.mural-form {
+  position: relative;
+
+  width: 100%;
+  height: 64px;
+
+  display: flex;
+
+  align-items: center;
+
+  padding:
+    7px
+    112px
+    7px
+    18px;
+
+  border:
+    1px solid
+    rgba(43,43,43,.14);
+
+  border-radius: 22px;
+
+  background:
+    rgba(255,255,255,.94);
+
+  box-shadow:
+    0 13px 32px
+    rgba(0,0,0,.08);
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+}
+
+
+.mural-input {
+  width: 100%;
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+
+  outline: 0;
+
+  background: transparent;
+
+  color:
+    #2b2b2b;
+
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+
+  font-size: 17px;
+
+  font-weight: 300;
+}
+
+
+.mural-input::placeholder {
+  color:
+    rgba(43,43,43,.40);
+
+  opacity: 1;
+}
+
+
+.mural-input:disabled {
+  cursor: default;
+
+  color:
+    rgba(43,43,43,.46);
+}
+
+
+/* =========================================
+   BOTÃO ESTIVE AQUI
+========================================= */
+
+.mural-submit-button {
+  position: absolute;
+
+  top: 50%;
+  right: 12px;
+
+  width: 94px;
+  height: auto;
+
+  margin: 0;
+  padding: 0;
+
+  border: 0;
+
+  background: transparent;
+
+  transform:
+    translateY(-50%);
+
+  transform-origin:
+    center;
+
+  transition:
+    transform .1s ease,
+    opacity .18s ease;
+}
+
+
+.mural-submit-button img {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  pointer-events: none;
+
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+
+.mural-submit-button:hover {
+  transform:
+    translateY(-50%)
+    scale(1.035);
+}
+
+
+.mural-submit-button.is-pressing {
+  transform:
+    translateY(-50%)
+    scale(.94);
+}
+
+
+.mural-submit-button:disabled {
+  opacity: .48;
+
+  pointer-events: none;
+}
+
+
+.mural-feedback {
+  min-height: 18px;
+
+  margin:
+    7px 10px 0;
+
+  color:
+    #6bbc0e;
+
+  font-family:
+    "coolvetica",
+    "Coolvetica",
+    Arial,
+    sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 300;
+
+  text-align: center;
+}
+
+
+/* =========================================
+   CAIXA DE INFO
+========================================= */
+
+.mural-info-backdrop {
+  position: fixed;
+
+  z-index: 5000;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background:
+    rgba(255,255,255,.56);
+
+  backdrop-filter:
+    blur(6px);
+
+  -webkit-backdrop-filter:
+    blur(6px);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  transition:
+    opacity .2s ease,
+    visibility .2s ease;
+}
+
+
+.mural-info-backdrop.is-open {
+  opacity: 1;
+
+  visibility: visible;
+}
+
+
+.mural-info-box {
+  position: relative;
+
+  width:
+    min(
+      430px,
+      92vw
+    );
+
+  padding:
+    34px
+    32px
+    30px;
+
+  border:
+    1px solid
+    rgba(43,43,43,.12);
+
+  border-radius: 22px;
+
+  background:
+    rgba(255,255,255,.96);
+
+  box-shadow:
+    0 20px 55px
+    rgba(0,0,0,.12);
+
+  color:
+    #2b2b2b;
+
+  transform:
+    translateY(10px)
+    scale(.98);
+
+  transition:
+    transform .22s ease;
+}
+
+
+.mural-info-backdrop.is-open
+.mural-info-box {
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+.mural-info-box h2 {
+  margin:
+    0 0 15px;
+
+  font-size: 30px;
+
+  font-weight: 400;
+}
+
+
+.mural-info-box p {
+  margin:
+    0 0 11px;
+
+  color:
+    rgba(43,43,43,.68);
+
+  font-size: 15px;
+
+  font-weight: 300;
+
+  line-height: 1.45;
+}
+
+
+.mural-info-close {
+  position: absolute;
+
+  top: 10px;
+  right: 11px;
+
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border:
+    1px solid
+    rgba(43,43,43,.10);
+
+  border-radius: 50%;
+
+  background:
+    #f5f5f5;
+
+  color:
+    rgba(43,43,43,.58);
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 18px;
+}
+
+
+/* =========================================
+   DURANTE O LOADING
+========================================= */
+
+body.is-loading
+.mural-info-button,
+
+body.is-loading
+.mural-entry-area {
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media
+(max-width: 700px) {
+
+  .mural-shell {
+    padding:
+      24px
+      18px
+      125px;
+  }
+
+
+  .mural-title-link {
+    margin-top: 60px;
+  }
+
+
+  .mural-title-image {
+    width:
+      min(
+        300px,
+        72vw
+      );
+  }
+
+
+  .mural-info-button {
+    top: 90px;
+    right: 14px;
+
+    width: 44px;
+  }
+
+
+  .nick-wall {
+    width: 94vw;
+
+    min-height:
+      calc(
+        100vh - 340px
+      );
+
+    margin-top: 20px;
+
+    grid-template-columns:
+      repeat(
+        3,
+        minmax(80px,1fr)
+      );
+
+    gap:
+      24px
+      12px;
+
+    padding:
+      22px
+      0;
+  }
+
+
+  .mural-nick {
+    --nick-size: 17px;
+  }
+
+
+  .mural-entry-area {
+    bottom: 18px;
+
+    width:
+      calc(
+        100vw - 28px
+      );
+  }
+
+
+  .mural-form {
+    height: 58px;
+
+    padding:
+      6px
+      96px
+      6px
+      14px;
+
+    border-radius: 19px;
+  }
+
+
+  .mural-input {
+    font-size: 15px;
+  }
+
+
+  .mural-submit-button {
+    right: 9px;
+
+    width: 82px;
+  }
+
+}

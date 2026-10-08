@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Mural Estive Aqui — Babi Edita"
+  >
+
+  <title>Mural — Babi Edita</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="favicon.png"
+  >
+
+  <link
+    rel="stylesheet"
+    href="https://use.typekit.net/ndv3lae.css"
+  >
+
+  <!-- CSS geral do site -->
+  <link
+    rel="stylesheet"
+    href="style.css?v=1500"
+  >
+
+  <!-- CSS exclusivo do mural -->
+  <link
+    rel="stylesheet"
+    href="mural.css?v=1"
+  >
+</head>
+
+<body class="mural-page">
+
+  <!-- =====================================
+       TELA DE LOADING
+  ====================================== -->
+
+  <div
+    class="site-loader"
+    id="siteLoader"
+  >
+    <div class="loader-content">
+
+      <video
+        class="loader-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+      >
+        <source
+          src="loading.mp4"
+          type="video/mp4"
+        >
+      </video>
+
+      <div class="loader-progress">
+        <div
+          class="loader-progress-fill"
+          id="loaderProgress"
+        ></div>
+      </div>
+
+      <p
+        class="loader-text"
+        id="loaderText"
+      >
+        carregando vídeos
+      </p>
+
+    </div>
+  </div>
+
+
+  <!-- =====================================
+       PLAYER DE MÚSICA
+  ====================================== -->
+
+  <div
+    class="music-player"
+    id="musicPlayer"
+  >
+    <img
+      class="music-cover"
+      id="musicCover"
+      src="covers/miimaker.png"
+      alt=""
+    >
+
+    <div class="music-info">
+
+      <span class="music-now">
+        Você está ouvindo agora:
+      </span>
+
+      <span
+        class="music-title"
+        id="musicTitle"
+      >
+        Mii Maker Editing Mii
+      </span>
+
+    </div>
+
+    <div class="music-controls">
+
+      <button
+        class="music-control"
+        id="musicPrev"
+        type="button"
+        aria-label="Música anterior"
+      >
+        ◀◀
+      </button>
+
+      <button
+        class="music-control music-play"
+        id="musicPlay"
+        type="button"
+        aria-label="Tocar ou pausar"
+      >
+        ▶
+      </button>
+
+      <button
+        class="music-control"
+        id="musicNext"
+        type="button"
+        aria-label="Próxima música"
+      >
+        ▶▶
+      </button>
+
+    </div>
+
+    <div
+      class="music-volume-wrap"
+      aria-label="Controle de volume"
+    >
+      <input
+        class="music-volume"
+        id="musicVolume"
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        step="1"
+        aria-label="Volume da música"
+      >
+    </div>
+
+    <button
+      class="music-close"
+      id="musicClose"
+      type="button"
+      aria-label="Minimizar player"
+    >
+      ×
+    </button>
+
+    <audio
+      id="backgroundAudio"
+      preload="auto"
+    ></audio>
+  </div>
+
+
+  <!-- PLAYER MINIMIZADO -->
+
+  <div
+    class="music-player-mini is-hidden"
+    id="musicPlayerMini"
+    aria-label="Player de música minimizado"
+  >
+
+    <button
+      class="music-mini-control"
+      id="musicMiniPrev"
+      type="button"
+      aria-label="Música anterior"
+    >
+      ◀◀
+    </button>
+
+    <button
+      class="music-mini-control music-mini-play"
+      id="musicMiniPlay"
+      type="button"
+      aria-label="Tocar ou pausar"
+    >
+      ▶
+    </button>
+
+    <button
+      class="music-mini-control"
+      id="musicMiniNext"
+      type="button"
+      aria-label="Próxima música"
+    >
+      ▶▶
+    </button>
+
+  </div>
+
+
+  <!-- =====================================
+       PÁGINA DO MURAL
+  ====================================== -->
+
+  <main class="mural-shell">
+
+    <!-- TÍTULO FEITO POR VOCÊ -->
+    <a
+      href="index.html"
+      class="mural-title-link"
+      aria-label="Voltar para o portfólio"
+    >
+      <img
+        src="mural.png"
+        alt="Mural"
+        class="mural-title-image"
+      >
+    </a>
+
+
+    <!-- BOTÃO INFO -->
+    <button
+      class="mural-info-button"
+      id="muralInfoButton"
+      type="button"
+      aria-label="Como funciona o mural"
+      aria-expanded="false"
+    >
+      <img
+        id="muralInfoImage"
+        src="info-1.png"
+        alt=""
+        draggable="false"
+      >
+    </button>
+
+
+    <!-- ÁREA ONDE OS NICKS APARECEM -->
+    <section
+      class="nick-wall"
+      id="nickWall"
+      aria-live="polite"
+      aria-label="Pessoas que estiveram aqui"
+    >
+      <p
+        class="mural-empty"
+        id="muralEmpty"
+      >
+        seja a primeira pessoa a deixar uma marca por aqui :)
+      </p>
+    </section>
+
+
+    <!-- CAMPO DE ENVIO -->
+    <section
+      class="mural-entry-area"
+      aria-label="Deixe seu nome ou nick"
+    >
+
+      <form
+        class="mural-form"
+        id="muralForm"
+        autocomplete="off"
+      >
+
+        <label
+          class="sr-only"
+          for="muralNickname"
+        >
+          Seu nick ou nome
+        </label>
+
+        <input
+          class="mural-input"
+          id="muralNickname"
+          name="nickname"
+          type="text"
+          minlength="2"
+          maxlength="24"
+          placeholder="Deixe seu nick ou nome por aqui..."
+          autocomplete="off"
+          spellcheck="false"
+          required
+        >
+
+        <button
+          class="mural-submit-button"
+          id="muralSubmitButton"
+          type="submit"
+          aria-label="Estive aqui"
+        >
+          <img
+            id="muralSubmitImage"
+            src="estive-aqui-1.png"
+            alt=""
+            draggable="false"
+          >
+        </button>
+
+      </form>
+
+      <p
+        class="mural-feedback"
+        id="muralFeedback"
+        aria-live="polite"
+      ></p>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================
+       CAIXINHA DE INFORMAÇÃO
+       depois podemos trocar este conteúdo
+       pela imagem que você ainda vai criar
+  ====================================== -->
+
+  <div
+    class="mural-info-backdrop"
+    id="muralInfoBackdrop"
+    aria-hidden="true"
+  >
+
+    <div
+      class="mural-info-box"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="muralInfoTitle"
+    >
+
+      <button
+        class="mural-info-close"
+        id="muralInfoClose"
+        type="button"
+        aria-label="Fechar"
+      >
+        ×
+      </button>
+
+      <h2 id="muralInfoTitle">
+        estive aqui!
+      </h2>
+
+      <p>
+        Esse é um cantinho pra quem passou pelo meu portfólio deixar uma marquinha.
+      </p>
+
+      <p>
+        Você pode escrever seu nome ou nick uma vez por navegador. Assim que enviar, ele aparece no mural.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- JS geral do site: música + loading -->
+  <script src="script.js?v=1500"></script>
+
+  <!-- JS exclusivo do mural -->
+  <script src="mural.js?v=1"></script>
+
+</body>
+
+</html>
